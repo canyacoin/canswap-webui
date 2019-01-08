@@ -1,0 +1,37 @@
+image: node:11.6-alpine
+
+variables:
+  APP_PATH: /builds/$CI_PROJECT_PATH
+
+before_script:
+  - cd $APP_PATH
+  - npm i yarn@1.12.3 -g
+  - npm i firebase-tools@6.2.2 -g
+
+stages:
+  - build
+  - deploy
+
+dist:production:
+  stage: build
+  environment: production
+  only:
+    - master
+  artifacts:
+    name: "canswap-webui build"
+    paths:
+      - $APP_PATH/build
+  script:
+    - yarn
+    - yarn run build
+
+deploy:production:
+  stage: deploy
+  environment: production
+  only:
+    - master
+  dependencies:
+    - dist:production
+  script:
+    - yarn
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID
