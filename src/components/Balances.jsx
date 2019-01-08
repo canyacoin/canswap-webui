@@ -49,7 +49,7 @@ class Balances extends Component {
 
 
 Balances.propTypes = {
-    classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(Balances);

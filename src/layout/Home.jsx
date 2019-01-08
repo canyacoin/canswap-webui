@@ -4,9 +4,14 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
 import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+
 import Balances from '../components/Balances';
+import Swap from '../components/Swap';
 
 const styles = theme => ({
   root: {
@@ -23,7 +28,11 @@ const styles = theme => ({
   tabBar: {
     backgroundColor: '#fff',
     boxShadow: 'none',
+    minHeight: 48,
     borderBottom: '1px solid #f8f8f8'
+  },
+  grow: {
+    flexGrow: 1
   },
   subContainer: {
     flexGrow: 1,
@@ -36,6 +45,9 @@ const styles = theme => ({
   mainContainer: {
     flexGrow: 1,
   },
+  toolbar: {
+    minHeight: 48
+  }
 });
 
 class Home extends Component {
@@ -43,6 +55,7 @@ class Home extends Component {
   state = {
     subTabIndex: 0,
     mainTabIndex: 0,
+    showBackButton: false
   };
 
   handleSubChange = (event, value) => {
@@ -59,6 +72,10 @@ class Home extends Component {
 
   handleMainChangeIndex = index => {
     this.setState({ mainTabIndex: index });
+  };
+
+  showHideBackButton = () => {
+    this.setState({ showBackButton: !this.state.showBackButton });
   };
 
   render() {
@@ -86,7 +103,7 @@ class Home extends Component {
                 onChangeIndex={this.handleSubChangeIndex}
                 className={classes.tabContents}
               >
-                <Balances></Balances>
+                <Balances />
                 <div>Item Two</div>
               </SwipeableViews>
             </div>
@@ -94,6 +111,8 @@ class Home extends Component {
           <Grid item xs={9}>
             <div className={classes.mainContainer}>
               <AppBar position="static" className={classes.tabBar}>
+              { 
+                !this.state.showBackButton && 
                 <Tabs
                   value={this.state.mainTabIndex}
                   onChange={this.handleMainChange}
@@ -104,8 +123,22 @@ class Home extends Component {
                   <Tab label="Pools" />
                   <Tab label="Arbitrage" />
                 </Tabs>
-              </AppBar>
-              {this.state.mainTabIndex === 0 && <div>Item One</div>}
+              }
+              {
+                this.state.showBackButton && 
+                <Toolbar className={classes.toolbar} >
+                  <Button color="primary" onClick={() => this.showHideBackButton()}> 
+                    <KeyboardArrowLeft />
+                    Back
+                  </Button>
+                  <div className={classes.grow}></div>         
+                </Toolbar>
+              }
+              </AppBar> 
+              {
+                this.state.mainTabIndex === 0 && 
+                <Swap onClick={() => this.showHideBackButton()} />
+              }
               {this.state.mainTabIndex === 1 && <div>Item Two</div>}
               {this.state.mainTabIndex === 2 && <div>Item Three</div>}
             </div>
