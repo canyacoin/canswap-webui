@@ -11,19 +11,30 @@ import logo from '../assets/logo.svg'
 
 const styles = theme => ({
   root: {
+    boxShadow: 'none',
+  },
+  toolbar: {
     backgroundColor: '#fff',
     paddingLeft: 32,
     paddingRight: 32,
+    paddingTop: 8,
+    paddingBottom: 8,
     [theme.breakpoints.up('md')]: {
-      paddingLeft: 64,
-      paddingRight: 64
+      paddingLeft: 96,
+      paddingRight: 96,
+      paddingTop: 16,
+      paddingBottom: 16,
     },
   },
   grow: {
     flexGrow: 1
   },
   logo: {
-    maxHeight: 64
+    maxHeight: 128,
+    height: 32,
+    [theme.breakpoints.up('md')]: {
+      height: 48,
+    }
   },
   icon: {
     fontSize: 16,
@@ -35,8 +46,8 @@ function Header(props) {
   const { classes } = props;
 
   return (
-      <AppBar position="static">
-          <Toolbar className={classes.root} >
+      <AppBar position="static" className={classes.root}>
+          <Toolbar className={classes.toolbar} >
               <img src={logo} className={classes.logo} alt="canswap logo" />
               <div className={classes.grow}></div>                 
               <Lens className={classes.icon} />

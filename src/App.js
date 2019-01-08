@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import Header from './components/Header.jsx';
+import Header from './layout/Header.jsx';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Home from './components/Home.jsx';
+import Home from './layout/Home.jsx';
 
 const theme = createMuiTheme({
   palette: {
