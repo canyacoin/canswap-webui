@@ -7,6 +7,7 @@ before_script:
   - cd $APP_PATH
   - npm i yarn@1.12.3 -g
   - npm i firebase-tools@6.2.2 -g
+  - apk add --no-cache git
 
 stages:
   - build
