@@ -12,6 +12,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
 import Balances from '../components/Balances';
 import Swap from '../components/Swap';
+import ConnectionCheck from './ConnectionCheck.jsx';
 
 const styles = theme => ({
   root: {
@@ -47,7 +48,7 @@ const styles = theme => ({
   },
   toolbar: {
     minHeight: 48
-  }
+  },
 });
 
 class Home extends Component {
@@ -58,21 +59,9 @@ class Home extends Component {
     showBackButton: false
   };
 
-  handleSubChange = (event, value) => {
-    this.setState({ subTabIndex: value });
-  };
-
-  handleSubChangeIndex = index => {
-    this.setState({ subTabIndex: index });
-  };
-
-  handleMainChange = (event, value) => {
-    this.setState({ mainTabIndex: value });
-  };
-
-  handleMainChangeIndex = index => {
-    this.setState({ mainTabIndex: index });
-  };
+  handleTabChange = (index, mainTab = true) => {
+    mainTab ? this.setState({ mainTabIndex: index }) : this.setState({ subTabIndex: index })
+  }
 
   showHideBackButton = () => {
     this.setState({ showBackButton: !this.state.showBackButton });
@@ -82,71 +71,81 @@ class Home extends Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>
-        <Grid container spacing={24}>
-          <Grid item xs={3}>
-            <div className={classes.SubContainer}>
-              <AppBar position="static" className={classes.tabBar}>
-                <Tabs
-                  value={this.state.subTabIndex}
-                  onChange={this.handleSubChange}
-                  indicatorColor="primary"
-                  textColor="primary"
+      <ConnectionCheck>
+        <div className={classes.root}>
+          <Grid container spacing={24}>
+            <Grid item xs={3}>
+              <div className={classes.SubContainer}>
+                <AppBar position="static" className={classes.tabBar}>
+                  <Tabs
+                    value={this.state.subTabIndex}
+                    onChange={(event, value) => this.handleTabChange(value, false)}
+                    indicatorColor="primary"
+                    textColor="primary"
+                  >
+                    <Tab label="Assets" />
+                    <Tab label="Stakes" />
+                  </Tabs>
+                </AppBar>
+                <SwipeableViews
+                  axis={'x'}
+                  index={this.state.subTabIndex}
+                  onChangeIndex={(index) => this.handleTabChange(index, false)}
+                  className={classes.tabContents}
                 >
-                  <Tab label="Assets" />
-                  <Tab label="Stakes" />
-                </Tabs>
-              </AppBar>
-              <SwipeableViews
-                axis={'x'}
-                index={this.state.subTabIndex}
-                onChangeIndex={this.handleSubChangeIndex}
-                className={classes.tabContents}
-              >
-                <Balances />
-                <div>Item Two</div>
-              </SwipeableViews>
-            </div>
+                  <Balances />
+                  <div>Item Two</div>
+                </SwipeableViews>
+              </div>
+            </Grid>
+            <Grid item xs={9}>
+              <div className={classes.mainContainer}>
+                <AppBar position="static" className={classes.tabBar}>
+                { 
+                  !this.state.showBackButton && 
+                  <Tabs
+                    value={this.state.mainTabIndex}
+                    onChange={(event, value) => this.handleTabChange(value)}
+                    indicatorColor="primary"
+                    textColor="primary"
+                  >
+                    <Tab label="Swap" />
+                    <Tab label="Pools" />
+                    <Tab label="Arbitrage" />
+                  </Tabs>
+                }
+                {
+                  this.state.showBackButton && 
+                  <Toolbar className={classes.toolbar} >
+                    <Button color="primary" onClick={() => this.showHideBackButton()}> 
+                      <KeyboardArrowLeft />
+                      Back
+                    </Button>
+                    <div className={classes.grow}></div>         
+                  </Toolbar>
+                }
+                </AppBar> 
+                {
+                  this.state.mainTabIndex === 0 && 
+                  <Swap onClick={() => this.showHideBackButton()} />
+                }
+                {
+                  this.state.mainTabIndex === 1 && 
+                  <div>
+                  </div>
+                }
+                {
+                  this.state.mainTabIndex === 2 && 
+                  <div>
+                  </div>
+                }
+              </div>
+            </Grid>
           </Grid>
-          <Grid item xs={9}>
-            <div className={classes.mainContainer}>
-              <AppBar position="static" className={classes.tabBar}>
-              { 
-                !this.state.showBackButton && 
-                <Tabs
-                  value={this.state.mainTabIndex}
-                  onChange={this.handleMainChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                >
-                  <Tab label="Swap" />
-                  <Tab label="Pools" />
-                  <Tab label="Arbitrage" />
-                </Tabs>
-              }
-              {
-                this.state.showBackButton && 
-                <Toolbar className={classes.toolbar} >
-                  <Button color="primary" onClick={() => this.showHideBackButton()}> 
-                    <KeyboardArrowLeft />
-                    Back
-                  </Button>
-                  <div className={classes.grow}></div>         
-                </Toolbar>
-              }
-              </AppBar> 
-              {
-                this.state.mainTabIndex === 0 && 
-                <Swap onClick={() => this.showHideBackButton()} />
-              }
-              {this.state.mainTabIndex === 1 && <div>Item Two</div>}
-              {this.state.mainTabIndex === 2 && <div>Item Three</div>}
-            </div>
-          </Grid>
-        </Grid>
-      </div>
-      )
-    }
+        </div>
+      </ConnectionCheck>
+    )
+  }
 }
 
 Home.propTypes = {

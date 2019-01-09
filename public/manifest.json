@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CanSwap",
+  "name": "CanSwap - liquidity pools for the CanYa ecosystem",
   "icons": [
     {
       "src": "favicon.ico",
