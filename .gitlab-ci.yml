@@ -1,13 +1,10 @@
-image: node:11.6-alpine
+image: registry.gitlab.com/canya-com/shared/build-containers/react-container:0.1
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH
 
 before_script:
   - cd $APP_PATH
-  - npm i yarn@1.12.3 -g
-  - npm i firebase-tools@6.2.2 -g
-  - apk add --no-cache git
 
 stages:
   - build
