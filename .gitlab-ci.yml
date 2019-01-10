@@ -1,4 +1,4 @@
-image: registry.gitlab.com/canya-com/shared/build-containers/react-container:0.2
+image: registry.gitlab.com/canya-com/shared/build-containers/react-container:0.3
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH
