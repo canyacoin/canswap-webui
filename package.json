@@ -5,11 +5,13 @@
   "dependencies": {
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.2",
+    "bignumber.js": "^8.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-scripts": "2.1.2",
     "react-swipeable-views": "^0.13.0",
     "react-web3": "^1.2.0",
+    "typescript": "^3.2.2",
     "web3": "^1.0.0-beta.37"
   },
   "scripts": {

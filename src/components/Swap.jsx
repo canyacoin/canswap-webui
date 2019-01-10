@@ -12,7 +12,7 @@ const styles = theme => ({
   }
 });
 
-class Balances extends Component {
+class Swap extends Component {
 
   render() {
     const { classes } = this.props;
@@ -28,9 +28,9 @@ class Balances extends Component {
 }
 
 
-Balances.propTypes = {
+Swap.propTypes = {
   classes: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Balances);
+export default withStyles(styles)(Swap);

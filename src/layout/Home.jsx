@@ -12,7 +12,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
 import Balances from '../components/Balances';
 import Swap from '../components/Swap';
-import ConnectionCheck from './ConnectionCheck.jsx';
+import ConnectionCheck from './ConnectionCheck';
 
 const styles = theme => ({
   root: {
