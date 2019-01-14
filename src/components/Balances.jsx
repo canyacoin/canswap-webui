@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import Icon from '@material-ui/core/Icon';
-import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { BigNumber } from 'bignumber.js';
 
 const styles = theme => ({
@@ -14,6 +15,46 @@ const styles = theme => ({
     width: '100%'
   }
 });
+
+function BalanceList(props) {
+
+  function getBalance(amount, decimals) {
+    const usdVal = new BigNumber(amount.toString()).dividedBy(new BigNumber((10**decimals).toString(16), 16));
+    return parseFloat(usdVal.toPrecision(10));
+  }
+
+  function renderList(){
+    let list = [];
+    let tokens = props.tokens;
+
+    for (let i = 0; i < tokens.length; i++) {
+      list.push(
+      <ListItem button key={`balance-${i}`}>
+        <ListItemIcon>
+          <img src={`${process.env.PUBLIC_URL}/icons/${tokens[i].tokenInfo.symbol.toLowerCase()}.svg`} alt="" width="24" height="24" />
+        </ListItemIcon>
+        <ListItemText 
+          primary={tokens[i].tokenInfo.symbol} 
+          secondary={getBalance(tokens[i].balance, tokens[i].tokenInfo.decimals)} 
+        />
+        <ListItemSecondaryAction>
+          <ListItemText 
+            primary={''} 
+            secondary={tokens[i].usdVal} 
+          />            
+        </ListItemSecondaryAction>
+      </ListItem>);
+    }
+
+    return <List>{list}</List>
+
+  }
+
+  return (
+    renderList()
+  );
+}
+
 
 class Balances extends Component {
 
@@ -23,7 +64,7 @@ class Balances extends Component {
       lastAddress: context.web3.selectedAccount || "",
       lastSynced: null,
       error: null,
-      // isLoaded: false,
+      isLoaded: false,
     } 
   }
 
@@ -39,6 +80,16 @@ class Balances extends Component {
     }
   }
 
+  getUsdValue(token) {
+    if(token.tokenInfo && token.tokenInfo.price) {
+      const usdVal = new BigNumber(token.balance.toString()).multipliedBy(new BigNumber(token.tokenInfo.price.rate)).dividedBy(new BigNumber((10**token.tokenInfo.decimals).toString(16), 16));
+      console.log(`${token.tokenInfo.symbol} ------- ${usdVal}`)
+      return parseFloat(usdVal.toPrecision(5)) + ' USD';
+      // return token.tokenInfo && token.tokenInfo.price && (usdVal).gt(new BigNumber("0.5"));
+    }
+    return '';
+  }
+
   loadBalances(address){
     let addressInfo = null;
     fetch("http://api.ethplorer.io/getAddressInfo/" +
@@ -47,12 +98,8 @@ class Balances extends Component {
       .then(
         (result) => {
           addressInfo = result;
-          addressInfo.tokens = addressInfo.tokens.filter((token) => {
-            if(token.tokenInfo && token.tokenInfo.price) {
-              const usdVal = new BigNumber(token.balance.toString()).multipliedBy(new BigNumber(token.tokenInfo.price.rate)).dividedBy(new BigNumber((10**token.tokenInfo.decimals).toString(16), 16));
-              return token.tokenInfo && token.tokenInfo.price && (usdVal).gt(new BigNumber("0.5"));
-            }
-            return false;            
+          addressInfo.tokens.forEach(element => {
+            element.usdVal = this.getUsdValue(element);
           });
           this.setState({
             lastAddress: address,
@@ -74,39 +121,16 @@ class Balances extends Component {
       )
   }
 
-  displayBalances = () => {
-    let list = []
-    const tokens = this.state.lastSynced.tokens;
-
-    for (let i = 0; i < tokens.length; i++) {
-      list.push(<ListItem button>
-        <ListItemIcon>
-          {tokens[i].tokenInfo.name}
-        </ListItemIcon>
-        <ListItemText primary="Inbox" />
-      </ListItem>);
-    }
-
-    return list
-  }
-
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
-        <List component="nav">
           {
             this.state.lastSynced &&
-            this.displayBalances()
+            <BalanceList tokens={this.state.lastSynced.tokens}>
+            </BalanceList>
           }
-        </List>
-        <Divider />
-        <List component="nav">
-          <ListItem button>
-            <ListItemText primary="Trash" />
-          </ListItem>
-        </List>
       </div>
     );
   }
