@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import metamask from '../assets/metamask.svg';
+import Loader from '../components/Loader';
 
 
 const styles = () => ({
@@ -39,6 +39,8 @@ ConnectionError.propTypes = {
   message: PropTypes.string.isRequired,
 };
 
+
+
 class ConnectionCheck extends React.Component {
 
   constructor(props, context){
@@ -62,9 +64,7 @@ class ConnectionCheck extends React.Component {
     if(!web3 || !web3Context.selectedAccount){
       if(!this.state.initialised){
         return (
-          <div className={classes.spinnerContainer}>
-            <CircularProgress className={classes.progress} />
-          </div>
+          <Loader padding={156}></Loader>
         );
       }
       if(!web3){
