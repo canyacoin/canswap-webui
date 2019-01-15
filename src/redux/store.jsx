@@ -1,6 +1,6 @@
 import { createStore, compose } from 'redux'
 import { persistentStore, persistentReducer } from 'redux-pouchdb-plus';
-import { count, stackCounter } from './reducers'
+import { count, stackCounter, eth } from './reducers'
 import { combineReducers } from 'redux'
 import PouchDB from 'pouchdb';
 
@@ -8,27 +8,30 @@ const db = new PouchDB('canswap-core');
 
 const reducers = combineReducers({
   count: persistentReducer(count),
-  stackCounter: persistentReducer(stackCounter)
+  stackCounter: persistentReducer(stackCounter),
+  eth: persistentReducer(eth)
 })
 
+// db.allDocs({include_docs: true}).then((res) => {
+//   res.rows.forEach((row) => { 
+//     console.log(row.doc); 
+//   });
+// }).catch(console.log.bind(console));
 
-db.allDocs({include_docs: true}).then((res) => {
-  res.rows.forEach((row) => { 
-    console.log(row.doc); 
-  });
-}).catch(console.log.bind(console));
-
+let initialised = false;
 
 const createStoreWithMiddleware = compose(
   persistentStore({
     db, 
     onReady: (store) => {
-      console.log(`++ Store ${JSON.stringify(store)}`)
+      console.log(`++ Store`);
+      initialised = true;
     }
   })
 )(createStore);
 
 const store = createStoreWithMiddleware(reducers);
 
-export default store;
+export { initialised, store }
 
+export default store

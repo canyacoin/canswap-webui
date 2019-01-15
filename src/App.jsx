@@ -7,6 +7,7 @@ import './App.css';
 import store from './redux/store';
 import { addCount, addStack } from './redux/actions';
 import { inSync } from 'redux-pouchdb-plus';
+import { Provider } from 'react-redux'
 
 const theme = createMuiTheme({
   palette: {
@@ -53,12 +54,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Web3Provider passive={true}>
-          <MuiThemeProvider theme={theme}>
-            <Header />
-            <Home />
-          </MuiThemeProvider>
-        </Web3Provider>
+        <Provider store={store}>
+          <Web3Provider passive={true}>
+            <MuiThemeProvider theme={theme}>
+              <Header />
+              <Home />
+            </MuiThemeProvider>
+          </Web3Provider>
+        </Provider>
         <button onClick={() => {this.dispatchEv()}}>click</button>
       </div>
     );
