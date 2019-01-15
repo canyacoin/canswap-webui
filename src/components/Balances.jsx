@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
 import { BigNumber } from 'bignumber.js';
 import Loader from './Loader';
 import TokenIcon from './TokenIcon';
@@ -23,39 +24,38 @@ const styles = theme => ({
 function BalanceList(props) {
 
   let { tokens, classes, onHideToken, onTokenClick } = props;
-  
-  function getBalanceString(amount, decimals) {
-    const usdVal = new BigNumber(amount.toString()).dividedBy(new BigNumber((10**decimals).toString(16), 16))
-    return parseFloat(usdVal.toPrecision(10))
-  }
 
   function renderList(){
     let list = [];
 
     for (let i = 0; i < tokens.length; i++) {
       list.push(
-      <ListItem button key={`balance-${i}`} onClick={() => onTokenClick(i)}>
-        <ListItemIcon>
-          <TokenIcon symbol={tokens[i].tokenInfo.symbol}></TokenIcon>
-        </ListItemIcon>
-        <ListItemText 
-          primary={tokens[i].tokenInfo.symbol} 
-          secondary={getBalanceString(tokens[i].balance, tokens[i].tokenInfo.decimals)} 
-        />
-        <ListItemSecondaryAction>
-          {
-            tokens[i].showActions &&
-            <DeleteIcon onClick={() => {onHideToken(i)}}></DeleteIcon>
-          }
-          {
-            !tokens[i].showActions &&
-            <ListItemText 
-              primary={''} 
-              secondary={tokens[i].usdVal} 
-            />   
-          }
-        </ListItemSecondaryAction>
-      </ListItem>);
+        !tokens[i].hidden && 
+        <ListItem button key={`balance-${i}`} onClick={() => onTokenClick(i)}>
+          <ListItemIcon>
+            <TokenIcon symbol={tokens[i].symbol}></TokenIcon>
+          </ListItemIcon>
+          <ListItemText 
+            primary={tokens[i].symbol} 
+            secondary={tokens[i].balance} 
+          />
+          <ListItemSecondaryAction>
+            {
+              tokens[i].showActions &&
+              <IconButton aria-label="Hide">
+                <VisibilityOffIcon onClick={() => {onHideToken(i)}}></VisibilityOffIcon>
+              </IconButton>
+            }
+            {
+              !tokens[i].showActions &&
+              <ListItemText 
+                primary={''} 
+                secondary={tokens[i].usdVal} 
+              />   
+            }
+          </ListItemSecondaryAction>
+        </ListItem>
+      );
     }
 
     return ( 
@@ -77,7 +77,8 @@ class Balances extends Component {
     super(props, context);
     this.state = {
       lastAddress: context.web3.selectedAccount || "",
-      lastSynced: null,
+      syncedAddress: "",
+      syncedBalances: [],
       error: null,
       isLoaded: false,
     } 
@@ -87,7 +88,7 @@ class Balances extends Component {
     this.loadBalances(this.state.lastAddress)
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     const web3Context = this.context.web3;
 
     if(this.state.lastAddress !== web3Context.selectedAccount){
@@ -100,63 +101,79 @@ class Balances extends Component {
       const usdVal = new BigNumber(token.balance.toString()).multipliedBy(new BigNumber(token.tokenInfo.price.rate)).dividedBy(new BigNumber((10**token.tokenInfo.decimals).toString(16), 16));
       console.log(`${token.tokenInfo.symbol} ------- ${usdVal}`)
       return parseFloat(usdVal.toPrecision(5)) + ' USD';
-      // return token.tokenInfo && token.tokenInfo.price && (usdVal).gt(new BigNumber("0.5"));
     }
     return '';
   }
 
+  getBalanceString(amount, decimals) {
+    const usdVal = new BigNumber(amount.toString()).dividedBy(new BigNumber((10**decimals).toString(16), 16))
+    return parseFloat(usdVal.toPrecision(10))
+  }
+
   hideToken(index) {
-    const addressInfo = this.state.lastSynced;
-    addressInfo.tokens[index].hidden = !addressInfo.tokens[index].hidden;
+    const tokens = this.state.syncedBalances.slice();
+    tokens[index].hidden = !tokens[index].hidden;
     this.setState({
-      lastSynced: addressInfo
+      syncedBalances: tokens
     });
   }
 
   showHideAction(index) {
-    const addressInfo = this.state.lastSynced;
-    addressInfo.tokens[index].showActions = !addressInfo.tokens[index].showActions;
+    const tokens = this.state.syncedBalances.slice();
+    tokens[index].showActions = !tokens[index].showActions;
     this.setState({
-      lastSynced: addressInfo
+      syncedBalances: tokens
     });
   }
 
   loadBalances(address){
-    let addressInfo = null;
+    let setError = (e) => {
+      this.setState({
+        lastAddress: address,
+        syncedAddress: '',
+        syncedBalances: [],
+        isLoaded: true,
+        error: e
+      });
+    }
+
     fetch(`http://api.ethplorer.io/getAddressInfo/` +
     `${address}?apiKey=${process.env.REACT_APP_ETHPLORER_KEY}`)
       .then(res => res.json())
       .then(
         (result) => {
           try {
-            addressInfo = result;
-            addressInfo.tokens.forEach(element => {
-              element.usdVal = this.getUsdValue(element);
-            });
-            // ToDo: Parse the API call
-            // Props: 'BalanceString' - 'USD Val' - 'Symbol/Name' - 'Address' - 'Hidden/showActions' - 
+            result.tokens.forEach(tkn => {
+              tkn.usdVal = this.getUsdValue(tkn);
+              tkn.hidden = false;
+              tkn.showActions = false;
+              tkn.balance = this.getBalanceString(tkn.balance, tkn.tokenInfo.decimals);
+              tkn.symbol = tkn.tokenInfo.symbol;
+              tkn.name = tkn.tokenInfo.name;
+              tkn.address = tkn.tokenInfo.address;
+            })
+            result.tokens.unshift({
+              usdVal: '',
+              hidden: false,
+              showActions: false,
+              balance: result.ETH.balance,
+              symbol: 'ETH',
+              name: 'Ethereum',
+              address: '0x0',
+            })
             this.setState({
               lastAddress: address,
-              lastSynced: addressInfo,
+              syncedAddress: address,
+              syncedBalances: result.tokens,
               error: null,
               isLoaded: true
             })
           } catch(e) {
-            this.setState({
-              lastAddress: address,
-              lastSynced: null,
-              isLoaded: true,
-              error: e
-            });
+            setError(e)
           }          
         },
         (error) => {
-          this.setState({
-            lastAddress: address,
-            lastSynced: null,
-            isLoaded: true,
-            error
-          });
+          setError(error)
         }
       )
   }
@@ -164,18 +181,16 @@ class Balances extends Component {
   render() {
     const { classes } = this.props;
 
-
     if (!this.state.isLoaded) {
-      return <Loader padding={50}></Loader>
+      return (
+        <Loader padding={50}></Loader>
+      );
     }
 
-    if (this.state.lastSynced) {
-      const visibleTokens = this.state.lastSynced.tokens.filter((val) => {
-        return !val.hidden;
-      });
+    if (this.state.syncedBalances) {
       return (
         <BalanceList 
-          tokens={visibleTokens}
+          tokens={this.state.syncedBalances}
           classes={classes}
           onHideToken={(i) => {this.hideToken(i)}}
           onTokenClick={(i) => {this.showHideAction(i)}}
@@ -188,6 +203,8 @@ class Balances extends Component {
         <div>ErrOr ReTriEving Balance</div>
       )
     }
+
+    return '';
   }
 }
 
