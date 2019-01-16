@@ -6,6 +6,7 @@ export const INCREMENT_COUNT = 'INCREMENT_COUNT'
 export const DECREMENT_COUNT = 'DECREMENT_COUNT'
 export const INCREMENT_STACK = 'INCREMENT_STACK'
 export const DECREMENT_STACK = 'DECREMENT_STACK'
+export const UPDATE_CONNECTION = 'UPDATE_CONNECTION'
 
 /*
  * other constants
@@ -34,5 +35,12 @@ export function addStack() {
 }
 
 export function lowerStack() {
-return { type: DECREMENT_STACK }
+  return { type: DECREMENT_STACK }
 }
+
+export function updateConnection(value) {
+  return { type: UPDATE_CONNECTION, value}
+}
+
+
+//TODO - action - initialiseWeb3

@@ -12,3 +12,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.App {
+  text-align: center;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.App-link {
+  color: #61dafb;
+}

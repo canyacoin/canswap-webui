@@ -208,6 +208,8 @@ class Balances extends Component {
   }
 }
 
+//TODO - VisibleBalanceList = connect(mapStateToProps, mapDispatchtoProps)(BalanceList)
+
 Balances.propTypes = {
   classes: PropTypes.object.isRequired
 };

@@ -3,6 +3,7 @@ import {
   DECREMENT_COUNT,
   INCREMENT_STACK,
   DECREMENT_STACK,
+  UPDATE_CONNECTION,
 } from './actions'
 
 function count(state = { val: 0 }, action){
@@ -28,30 +29,49 @@ function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
   }
 }
 
-function eth(state = {}, action) {
-  switch(action.type) {
-    case 'web3/RECEIVE_ACCOUNT':
-    console.log(JSON.stringify(action));
-      return {
-        ...state,
-        ethAddress: action.address
-      };
+// function eth(state = {}, action) {
+//   switch(action.type) {
+//     case 'initialise':
 
-    case 'web3/CHANGE_ACCOUNT':
-    console.log(JSON.stringify(action));
+//     case 'web3/RECEIVE_ACCOUNT':
+//     console.log(JSON.stringify(action));
+//       return {
+//         ...state,
+//         ethAddress: action.address
+//       };
+
+//     case 'web3/CHANGE_ACCOUNT':
+//     console.log(JSON.stringify(action));
+//       return {
+//         ...state,
+//         ethAddress: action.address
+//       };
+//     case 'web3/LOGOUT':
+//       return {
+//         ...state,
+//         ethAddress: null
+//       }
+//       default:
+//         return state
+//   }
+// }
+
+function connection(state = {
+  accounts: [],
+  networkId: null,
+  networkError: null
+}, action){
+  switch(action.type) {
+    case UPDATE_CONNECTION:
       return {
-        ...state,
-        ethAddress: action.address
-      };
-    case 'web3/LOGOUT':
-      return {
-        ...state,
-        ethAddress: null
+        ...state, 
+        ...action.value
       }
-      default:
-        return state
+    default:
+      return state
   }
 }
 
 
-export { eth, count, stackCounter}
+
+export { connection, count, stackCounter}

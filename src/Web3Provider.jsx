@@ -1,0 +1,239 @@
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { updateConnection } from './redux/actions';
+const isEmpty = require('lodash/isEmpty');
+const range = require('lodash/range');
+
+const ONE_SECOND = 1000;
+const ONE_MINUTE = ONE_SECOND * 60;
+
+
+class Web3Provider extends Component {
+
+  constructor(props, context) {
+    super(props, context);
+    const accounts = this.getAccounts();
+
+    console.log(`++ web3 state ${JSON.stringify(props)}`)
+
+    this.interval = null;
+    this.networkInterval = null;
+    this.fetchAccounts = this.fetchAccounts.bind(this);
+    this.fetchNetwork = this.fetchNetwork.bind(this);
+
+    if (accounts) {
+      this.handleAccounts(accounts, true);
+    }
+  }
+
+  getState() {
+    const { connection } = this.props;
+
+    return {
+      accounts: connection.accounts,
+      selectedAccount: connection.accounts && connection.accounts[0],
+      network: getNetwork(connection.networkId),
+      networkId: connection.networkId
+    };
+  }
+
+  /**
+   * Start polling accounts, & network. We poll indefinitely so that we can
+   * react to the user changing accounts or netowrks.
+   */
+  componentDidMount() {
+    this.fetchAccounts();
+    this.fetchNetwork();
+    this.initPoll();
+    this.initNetworkPoll();
+  }
+
+  /**
+   * Init web3/account polling, and prevent duplicate interval.
+   * @return {void}
+   */
+  initPoll() {
+    if (!this.interval) {
+      this.interval = setInterval(this.fetchAccounts, ONE_SECOND);
+    }
+  }
+
+  /**
+   * Init network polling, and prevent duplicate intervals.
+   * @return {void}
+   */
+  initNetworkPoll() {
+    if (!this.networkInterval) {
+      this.networkInterval = setInterval(this.fetchNetwork, ONE_MINUTE);
+    }
+  }
+
+  /**
+   * Update state regarding the availability of web3 and an ETH account.
+   * @return {void}
+   */
+  fetchAccounts() {
+    const { web3 } = window;
+    const { connection, dispatchConnection } = this.props;
+    const ethAccounts = this.getAccounts();
+
+    if (isEmpty(ethAccounts)) {
+      web3 && web3.currentProvider && web3.currentProvider.enable()
+      .then(accounts => this.handleAccounts(accounts))
+      .catch((err) => {
+        dispatchConnection({
+          ...connection,
+          accountsError: err
+        });
+      });
+    } else {
+      this.handleAccounts(ethAccounts);
+    }
+  }
+
+  handleAccounts(accounts, isConstructor = false) {
+    // const { onChangeAccount } = this.props;
+    // const { store } = this.context;
+    const { connection, dispatchConnection } = this.props;
+    let next = accounts[0];
+    let curr = connection.accounts[0];
+    next = next && next.toLowerCase();
+    curr = curr && curr.toLowerCase();
+    const didChange = curr && next && (curr !== next);
+
+    if (isEmpty(connection.accounts) && !isEmpty(accounts)) {
+      dispatchConnection({
+        ...connection,
+        accountsError: null,
+        accounts: accounts
+      });
+    }
+
+    if (didChange && !isConstructor) {
+      dispatchConnection({
+        ...connection,
+        accountsError: null,
+        accounts
+      });
+    }
+
+    // If provided, execute callback
+    // if (didChange && typeof onChangeAccount === 'function') {
+    //   onChangeAccount(next);
+    // }
+
+    // // If available, dispatch redux action
+    // if (store && typeof store.dispatch === 'function') {
+    //   const didLogin = !curr && next;
+    //   const didLogout = curr && !next;
+
+    //   if (didLogout) {
+    //     store.dispatch({
+    //       type: 'web3/LOGOUT',
+    //       address: null
+    //     })
+    //   } else if (didLogin || (isConstructor && next)) {
+    //     store.dispatch({
+    //       type: 'web3/RECEIVE_ACCOUNT',
+    //       address: next
+    //     });
+    //   } else if (didChange) {
+    //     store.dispatch({
+    //       type: 'web3/CHANGE_ACCOUNT',
+    //       address: next
+    //     })
+    //   }
+    // }
+  }
+
+  /**
+   * Get the network and update state accordingly.
+   * @return {void}
+   */
+  fetchNetwork() {
+    const { web3 } = window;
+    const { connection, dispatchConnection } = this.props;
+
+    if (web3) {
+      const isV1 = /^1/.test(web3.version);
+      const getNetwork = isV1 ? web3.eth.net.getId : web3.version.getNetwork;
+
+      getNetwork((err, netId) => {
+        if (err) {
+          dispatchConnection({
+            ...connection,
+            networkError: err
+          });
+        } else {
+          if (netId != connection.networkId) {
+            dispatchConnection({
+              ...connection,
+              networkError: null,
+              networkId: netId
+            })
+          }
+        }
+      });
+    }
+
+  }
+
+  /**
+   * Get the account. We wrap in try/catch because reading `web3.eth.accounts`
+   * will throw if no account is selected.
+   * @return {String}
+   */
+  getAccounts() {
+
+    try {
+      const { web3 } = window;
+      const isV1 = /^1/.test(web3.version);
+      // throws if no account selected
+      const getV1Wallets = () => range(web3.eth.accounts.wallet.length).map(i => web3.eth.accounts.wallet[i]).map(w => w.address);
+      const accounts = isV1 ? getV1Wallets() : web3.eth.accounts;
+
+      return accounts;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  render() {
+    return null;
+  }
+}
+
+const mapStateToProps = (state) => ({
+  connection: state.connection
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatchConnection: (connection) => dispatch(updateConnection(connection))
+})
+
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps
+)(Web3Provider)
+
+
+
+/* =============================================================================
+=    Deps
+============================================================================= */
+function getNetwork(networkId) {
+  switch (networkId) {
+    case '1':
+      return 'MAINNET';
+    case '2':
+      return 'MORDEN';
+    case '3':
+      return 'ROPSTEN';
+    case '4':
+      return 'RINKEBY';
+    case '42':
+      return 'KOVAN';
+    default:
+      return 'UNKNOWN';
+  }
+}

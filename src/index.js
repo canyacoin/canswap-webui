@@ -1,10 +1,20 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App.jsx';
+import store from './redux/store';
 import * as serviceWorker from './serviceWorker';
+import Web3Provider from './Web3Provider';
+import App from './App.jsx';
+import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <div className="App">
+    <Provider store={store}>
+      <Web3Provider />
+      <App />
+    </Provider>
+  </div>, 
+document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

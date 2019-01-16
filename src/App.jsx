@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Web3Provider } from 'react-web3';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Header from './layout/Header.jsx';
+import store from './redux/store';
 import Home from './layout/Home.jsx';
 import './App.css';
-import store from './redux/store';
 import { addCount, addStack } from './redux/actions';
 import { inSync } from 'redux-pouchdb-plus';
-import { Provider } from 'react-redux'
 
 const theme = createMuiTheme({
   palette: {
@@ -48,22 +46,15 @@ class App extends Component {
   dispatchEv(){// Dispatch some actions
     store.dispatch(addCount())
     store.dispatch(addStack())
-
   }
   
   render() {
     return (
-      <div className="App">
-        <Provider store={store}>
-          <Web3Provider passive={true}>
-            <MuiThemeProvider theme={theme}>
-              <Header />
-              <Home />
-            </MuiThemeProvider>
-          </Web3Provider>
-        </Provider>
+      <MuiThemeProvider theme={theme}>
+        <Header />
+        <Home />
         <button onClick={() => {this.dispatchEv()}}>click</button>
-      </div>
+      </MuiThemeProvider> 
     );
   }
 }

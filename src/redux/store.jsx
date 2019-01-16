@@ -1,6 +1,6 @@
 import { createStore, compose } from 'redux'
 import { persistentStore, persistentReducer } from 'redux-pouchdb-plus';
-import { count, stackCounter, eth } from './reducers'
+import { count, stackCounter, connection } from './reducers'
 import { combineReducers } from 'redux'
 import PouchDB from 'pouchdb';
 
@@ -9,7 +9,7 @@ const db = new PouchDB('canswap-core');
 const reducers = combineReducers({
   count: persistentReducer(count),
   stackCounter: persistentReducer(stackCounter),
-  eth: persistentReducer(eth)
+  connection: persistentReducer(connection)
 })
 
 // db.allDocs({include_docs: true}).then((res) => {
