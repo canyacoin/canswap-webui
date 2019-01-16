@@ -59,7 +59,8 @@ function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
 function connection(state = {
   accounts: [],
   networkId: null,
-  networkError: null
+  networkError: null,
+  selectedAccount: ''
 }, action){
   switch(action.type) {
     case UPDATE_CONNECTION:

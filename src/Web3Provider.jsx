@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateConnection } from './redux/actions';
 const isEmpty = require('lodash/isEmpty');
@@ -24,17 +24,6 @@ class Web3Provider extends Component {
     if (accounts) {
       this.handleAccounts(accounts, true);
     }
-  }
-
-  getState() {
-    const { connection } = this.props;
-
-    return {
-      accounts: connection.accounts,
-      selectedAccount: connection.accounts && connection.accounts[0],
-      network: getNetwork(connection.networkId),
-      networkId: connection.networkId
-    };
   }
 
   /**
@@ -96,25 +85,26 @@ class Web3Provider extends Component {
     // const { store } = this.context;
     const { connection, dispatchConnection } = this.props;
     let next = accounts[0];
-    let curr = connection.accounts[0];
+    let curr = connection.selectedAccount;
     next = next && next.toLowerCase();
     curr = curr && curr.toLowerCase();
     const didChange = curr && next && (curr !== next);
 
-    if (isEmpty(connection.accounts) && !isEmpty(accounts)) {
+    const dispatchAccs = () => {
       dispatchConnection({
         ...connection,
         accountsError: null,
-        accounts: accounts
+        accounts,
+        selectedAccount: next
       });
     }
 
+    if (isEmpty(connection.accounts) && !isEmpty(accounts)) {
+      dispatchAccs()
+    }
+
     if (didChange && !isConstructor) {
-      dispatchConnection({
-        ...connection,
-        accountsError: null,
-        accounts
-      });
+      dispatchAccs()
     }
 
     // If provided, execute callback
@@ -165,7 +155,7 @@ class Web3Provider extends Component {
             networkError: err
           });
         } else {
-          if (netId != connection.networkId) {
+          if (netId !== connection.networkId) {
             dispatchConnection({
               ...connection,
               networkError: null,

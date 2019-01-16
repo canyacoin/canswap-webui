@@ -30,7 +30,7 @@ class App extends Component {
 
     // Every time the state changes, log it
     // Note that subscribe() returns a function for unregistering the listener
-    const unsubscribe = store.subscribe(() => console.log(store.getState()))
+    store.subscribe(() => console.log(store.getState()))
 
     
     // store.dispatch(addTodo('Learn about reducers'))

@@ -9,7 +9,7 @@ const db = new PouchDB('canswap-core');
 const reducers = combineReducers({
   count: persistentReducer(count),
   stackCounter: persistentReducer(stackCounter),
-  connection: persistentReducer(connection)
+  connection
 })
 
 // db.allDocs({include_docs: true}).then((res) => {

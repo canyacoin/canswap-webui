@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
@@ -76,7 +76,7 @@ class Balances extends Component {
   constructor(props, context){
     super(props, context);
     this.state = {
-      lastAddress: context.web3.selectedAccount || "",
+      lastAddress: props.connection.selectedAccount || "",
       syncedAddress: "",
       syncedBalances: [],
       error: null,
@@ -89,10 +89,10 @@ class Balances extends Component {
   }
 
   componentDidUpdate() {
-    const web3Context = this.context.web3;
+    const { connection } = this.props;
 
-    if(this.state.lastAddress !== web3Context.selectedAccount){
-      this.loadBalances(web3Context.selectedAccount);
+    if(this.state.lastAddress !== connection.selectedAccount){
+      this.loadBalances(connection.selectedAccount);
     }
   }
 
@@ -210,12 +210,11 @@ class Balances extends Component {
 
 //TODO - VisibleBalanceList = connect(mapStateToProps, mapDispatchtoProps)(BalanceList)
 
-Balances.propTypes = {
-  classes: PropTypes.object.isRequired
-};
+const mapStateToProps = (state) => ({
+  connection: state.connection
+})
 
-Balances.contextTypes = {
-  web3: PropTypes.object
-};
+export default connect(
+  mapStateToProps
+)(withStyles(styles)(Balances));
 
-export default withStyles(styles)(Balances);

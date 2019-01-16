@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
 import metamask from '../assets/metamask.svg';
@@ -43,8 +44,8 @@ ConnectionError.propTypes = {
 
 class ConnectionCheck extends React.Component {
 
-  constructor(props, context){
-    super(props, context);
+  constructor(props){
+    super(props);
     this.state = {
       initialised: false
     }
@@ -57,11 +58,10 @@ class ConnectionCheck extends React.Component {
   }
 
   render() {
-    const web3Context = this.context.web3;
     const { web3 } = window;
-    const { classes } = this.props;
-
-    if(!web3 || !web3Context.selectedAccount){
+    const { classes, connection } = this.props;
+    console.log(`++ re render ${JSON.stringify(connection)}`)
+    if(!web3 || !connection.selectedAccount){
       if(!this.state.initialised){
         return (
           <Loader padding={156}></Loader>
@@ -86,17 +86,19 @@ class ConnectionCheck extends React.Component {
       <div> 
         { this.props.children } 
         { process.env.REACT_APP_NETWORK_ID } 
-        { web3Context.selectedAccount}  
+        { connection.selectedAccount}  
       </div>
     )
   }
 }
 
-ConnectionCheck.contextTypes = {
-  web3: PropTypes.object
-};
+const mapStateToProps = (state) => ({
+  connection: state.connection
+})
 
-export default withStyles(styles)(ConnectionCheck);
+export default connect(
+  mapStateToProps
+)(withStyles(styles)(ConnectionCheck));
 
 
 
