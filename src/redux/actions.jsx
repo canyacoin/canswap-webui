@@ -7,6 +7,7 @@ export const DECREMENT_COUNT = 'DECREMENT_COUNT'
 export const INCREMENT_STACK = 'INCREMENT_STACK'
 export const DECREMENT_STACK = 'DECREMENT_STACK'
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION'
+export const UPDATE_WEB3 = 'UPDATE_WEB3'
 
 /*
  * other constants
@@ -40,6 +41,10 @@ export function lowerStack() {
 
 export function updateConnection(value) {
   return { type: UPDATE_CONNECTION, value}
+}
+
+export function updateWeb3(value) {
+  return { type: UPDATE_WEB3, value}
 }
 
 

@@ -12,7 +12,6 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
 import Balances from '../components/Balances';
 import Swap from '../components/Swap';
-import ConnectionCheck from './ConnectionCheck';
 
 const styles = theme => ({
   root: {
@@ -71,7 +70,6 @@ class Home extends Component {
     const { classes } = this.props;
 
     return (
-      <ConnectionCheck>
         <div className={classes.root}>
           <Grid container spacing={24}>
             <Grid item xs={3}>
@@ -143,7 +141,6 @@ class Home extends Component {
             </Grid>
           </Grid>
         </div>
-      </ConnectionCheck>
     )
   }
 }

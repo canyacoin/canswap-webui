@@ -3,14 +3,16 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import store from './redux/store';
 import * as serviceWorker from './serviceWorker';
-import Web3Provider from './Web3Provider';
-import App from './App.jsx';
+// import Web3Provider from './Web3Provider';
+import App from './App';
+import getWeb3 from './util/manageWeb3';
 import './index.css';
+
+getWeb3();
 
 ReactDOM.render(
   <div className="App">
     <Provider store={store}>
-      <Web3Provider />
       <App />
     </Provider>
   </div>, 

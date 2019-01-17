@@ -4,6 +4,7 @@ import {
   INCREMENT_STACK,
   DECREMENT_STACK,
   UPDATE_CONNECTION,
+  UPDATE_WEB3,
 } from './actions'
 
 function count(state = { val: 0 }, action){
@@ -58,7 +59,7 @@ function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
 
 function connection(state = {
   accounts: [],
-  networkId: null,
+  network: null,
   networkError: null,
   selectedAccount: ''
 }, action){
@@ -73,6 +74,14 @@ function connection(state = {
   }
 }
 
+function web3js(state = {}, action){
+  switch(action.type) {
+    case UPDATE_WEB3:
+      return action.value
+    default:
+      return state
+  }
+}
 
 
-export { connection, count, stackCounter}
+export { connection, web3js, count, stackCounter}
