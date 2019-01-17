@@ -92,7 +92,8 @@ class ConnectionCheck extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  connection: state.connection
+  connection: state.connection,
+  web3js: state.web3js,
 })
 
 export default connect(

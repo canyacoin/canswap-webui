@@ -212,6 +212,7 @@ class Balances extends Component {
 
 const mapStateToProps = (state) => ({
   connection: state.connection
+  
 })
 
 export default connect(
