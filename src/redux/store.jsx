@@ -13,18 +13,12 @@ const reducers = combineReducers({
   web3js,
 })
 
-// db.allDocs({include_docs: true}).then((res) => {
-//   res.rows.forEach((row) => { 
-//     console.log(row.doc); 
-//   });
-// }).catch(console.log.bind(console));
-
 let initialised = false;
 
 const createStoreWithMiddleware = compose(
   persistentStore({
     db, 
-    onReady: (store) => {
+    onReady: () => {
       console.log(`++ Store`);
       initialised = true;
     }

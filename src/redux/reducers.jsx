@@ -18,7 +18,6 @@ function count(state = { val: 0 }, action){
   }
 };
 
-
 function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
   switch (action.type) {
     case INCREMENT_STACK:
@@ -29,33 +28,6 @@ function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
       return state
   }
 }
-
-// function eth(state = {}, action) {
-//   switch(action.type) {
-//     case 'initialise':
-
-//     case 'web3/RECEIVE_ACCOUNT':
-//     console.log(JSON.stringify(action));
-//       return {
-//         ...state,
-//         ethAddress: action.address
-//       };
-
-//     case 'web3/CHANGE_ACCOUNT':
-//     console.log(JSON.stringify(action));
-//       return {
-//         ...state,
-//         ethAddress: action.address
-//       };
-//     case 'web3/LOGOUT':
-//       return {
-//         ...state,
-//         ethAddress: null
-//       }
-//       default:
-//         return state
-//   }
-// }
 
 function connection(state = {
   accounts: [],

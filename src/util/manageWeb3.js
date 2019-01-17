@@ -13,7 +13,6 @@ let web3js = null;
 let connection = {};
 
 async function getWeb3() {
-  // Wait for loading completion to avoid race conditions with web3 injection timing.
   return new Promise((resolve, reject) => {
     window.addEventListener('load', () => {
       var { ethereum, web3 } = window;
@@ -157,15 +156,17 @@ async function manageWeb3() {
   const unsubscribe = store.subscribe(() => handleChange())
   window.addEventListener('beforeunload', () => unsubscribe());
 
-  const accounts = getAccounts();
-
-  fetchAccounts();
-  fetchNetwork();
-  initPoll();
-  initNetworkPoll();
-
-  if (accounts) {
-    handleAccounts(accounts, true);
+  if(web3js) {
+    const accounts = getAccounts();
+  
+    fetchAccounts();
+    fetchNetwork();
+    initPoll();
+    initNetworkPoll();
+  
+    if (accounts) {
+      handleAccounts(accounts, true);
+    }
   }
 }
 

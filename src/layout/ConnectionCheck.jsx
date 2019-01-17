@@ -58,16 +58,15 @@ class ConnectionCheck extends React.Component {
   }
 
   render() {
-    const { web3 } = window;
-    const { classes, connection } = this.props;
+    const { classes, connection, web3js } = this.props;
     console.log(`++ re render ${JSON.stringify(connection)}`)
-    if(!web3 || !connection.selectedAccount){
+    if(!web3js || !connection.selectedAccount){
       if(!this.state.initialised){
         return (
           <Loader padding={156}></Loader>
         );
       }
-      if(!web3){
+      if(!web3js){
         return (
           <ConnectionError title="Web3 Not Found" message="It seems that you are using a browser without Web3 capabilities. Please
           make sure that you are using a web3-capable browser like mist or parity.
