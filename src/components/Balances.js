@@ -64,7 +64,7 @@ function BalanceList(props) {
   }
 
   return (
-    <div className={classes.root}> 
+    <div > 
       { renderList() }
     </div>
   );

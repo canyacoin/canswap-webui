@@ -6,6 +6,9 @@ import {
   UPDATE_CONNECTION,
   UPDATE_WEB3,
 } from './actions'
+import { persistentReducer } from 'redux-pouchdb-plus';
+import { combineReducers } from 'redux'
+import { drizzleReducers } from 'drizzle'
 
 function count(state = { val: 0 }, action){
   switch(action.type) {
@@ -55,5 +58,14 @@ function web3js(state = {}, action){
   }
 }
 
+const reducers = combineReducers({
+  count: persistentReducer(count),
+  stackCounter: persistentReducer(stackCounter),
+  connection,
+  web3js,
+  ...drizzleReducers
+})
 
-export { connection, web3js, count, stackCounter}
+export { connection, web3js, count, stackCounter, reducers }
+
+export default reducers
