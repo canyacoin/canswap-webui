@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import store from './redux/store';
+import store from './state/store';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import getWeb3 from './util/manageWeb3';

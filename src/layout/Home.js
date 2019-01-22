@@ -10,8 +10,8 @@ import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
-import Balances from '../components/Balances';
-import Swap from '../components/Swap';
+import BalancesContainer from '../components/balances/BalancesContainer';
+import SwapContainer from '../components/swap/SwapContainer';
 
 const styles = theme => ({
   root: {
@@ -91,7 +91,7 @@ class Home extends Component {
                   onChangeIndex={(index) => this.handleTabChange(index, false)}
                   className={classes.tabContents}
                 >
-                  <Balances />
+                  <BalancesContainer />
                   <div>Item Two</div>
                 </SwipeableViews>
               </div>
@@ -125,7 +125,7 @@ class Home extends Component {
                 </AppBar> 
                 {
                   this.state.mainTabIndex === 0 && 
-                  <Swap onClick={() => this.showHideBackButton()} />
+                  <SwapContainer onClick={() => this.showHideBackButton()} />
                 }
                 {
                   this.state.mainTabIndex === 1 && 

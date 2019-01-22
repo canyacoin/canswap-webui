@@ -1,17 +1,8 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { drizzleConnect } from 'drizzle-react';
 import { withStyles } from '@material-ui/core/styles';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
 import { BigNumber } from 'bignumber.js';
-import Loader from './Loader';
-import TokenIcon from './TokenIcon';
+import Loader from '../../elements/Loader';
+import BalanceList from './BalanceList';
 
 const styles = theme => ({
   root: {
@@ -21,45 +12,6 @@ const styles = theme => ({
     flexGrow: 1
   },
 });
-
-function BalanceList(props) {
-
-  let { tokens, onHideToken, onTokenClick } = props;
-
-  return (
-    <List>
-      {tokens.map((tkn, i) => {
-        return (
-          !tkn.hidden && 
-          <ListItem button key={`balance-${i}`} onClick={() => onTokenClick(i)}>
-            <ListItemIcon>
-              <TokenIcon symbol={tkn.symbol}></TokenIcon>
-            </ListItemIcon>
-            <ListItemText 
-              primary={tkn.symbol} 
-              secondary={tkn.balance} 
-            />
-            <ListItemSecondaryAction>
-              {
-                tkn.showActions &&
-                <IconButton aria-label="Hide">
-                  <VisibilityOffIcon onClick={() => {onHideToken(i)}}></VisibilityOffIcon>
-                </IconButton>
-              }
-              {
-                !tkn.showActions &&
-                <ListItemText 
-                  primary={''} 
-                  secondary={tkn.usdVal} 
-                />   
-              }
-            </ListItemSecondaryAction>
-          </ListItem>
-        )
-      })}
-    </List>
-  );
-}
 
 
 class Balances extends Component {
@@ -199,15 +151,13 @@ class Balances extends Component {
   }
 }
 
-//TODO - VisibleBalanceList = connect(mapStateToProps, mapDispatchtoProps)(BalanceList)
+//TODO - THUNK
+// componentDidUpdate(prevProps) {
+//   if (prevProps.forPerson !== this.props.forPerson) {
+//     this.props.dispatch(
+//       makeASandwichWithSecretSauce(this.props.forPerson)
+//     );
+//   }
+// }
 
-const mapStateToProps = (state) => ({
-  connection: state.connection
-  
-})
-
-export default drizzleConnect(
-  withStyles(styles)(Balances),
-  mapStateToProps
-);
-
+export default withStyles(styles)(Balances)

@@ -5,10 +5,10 @@ import {
   DECREMENT_STACK,
   UPDATE_CONNECTION,
   UPDATE_WEB3,
+  ADD_CONTRACT,
 } from './actions'
 import { persistentReducer } from 'redux-pouchdb-plus';
 import { combineReducers } from 'redux'
-import { drizzleReducers } from 'drizzle'
 
 function count(state = { val: 0 }, action){
   switch(action.type) {
@@ -58,14 +58,23 @@ function web3js(state = {}, action){
   }
 }
 
+function contracts(state = [], action){
+  switch(action.type) {
+    case ADD_CONTRACT:
+      return state.concat(action.value)
+    default:
+      return state
+  }
+}
+
 const reducers = combineReducers({
   count: persistentReducer(count),
   stackCounter: persistentReducer(stackCounter),
   connection,
   web3js,
-  ...drizzleReducers
+  contracts
 })
 
-export { connection, web3js, count, stackCounter, reducers }
+export { connection, web3js, count, contracts, stackCounter, reducers }
 
 export default reducers

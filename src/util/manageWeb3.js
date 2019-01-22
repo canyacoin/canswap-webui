@@ -1,8 +1,9 @@
-import store from '../redux/store'
-import { updateConnection, updateWeb3 } from '../redux/actions'
+import store from '../state/store'
+import { updateConnection, updateWeb3, addContract } from '../state/actions'
 import Web3 from 'web3'
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
+import CanSwap from '../assets/contracts/CanSwap.json'
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
@@ -35,6 +36,11 @@ function initPoll() {
   if (!interval) {
     interval = setInterval(fetchAccounts, ONE_SECOND);
   }
+}
+
+function initContracts() {
+  const canSwap = new web3js.eth.Contract(CanSwap.abi, process.env.REACT_APP_CANSWAP_ADDRESS);
+  store.dispatch(addContract(canSwap))
 }
 
 function initNetworkPoll() {
@@ -161,6 +167,7 @@ async function manageWeb3() {
   
     fetchAccounts();
     fetchNetwork();
+    initContracts();
     initPoll();
     initNetworkPoll();
   

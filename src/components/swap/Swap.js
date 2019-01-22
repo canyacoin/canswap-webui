@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
@@ -15,7 +14,9 @@ const styles = theme => ({
 class Swap extends Component {
 
   render() {
-    const { classes } = this.props;
+    const { classes, contracts, connection } = this.props;
+
+    console.log(`+++ SwapContracts: ${contracts}`)
 
     return (
       <div className={classes.root}>
@@ -26,11 +27,5 @@ class Swap extends Component {
     );
   }
 }
-
-
-Swap.propTypes = {
-  classes: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
 
 export default withStyles(styles)(Swap);

@@ -20,6 +20,7 @@ dist:production:
     paths:
       - $APP_PATH/build
   script:
+    - echo $DOT_ENV >> $APP_PATH/.env
     - yarn
     - yarn run build
 

@@ -8,6 +8,7 @@ export const INCREMENT_STACK = 'INCREMENT_STACK'
 export const DECREMENT_STACK = 'DECREMENT_STACK'
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION'
 export const UPDATE_WEB3 = 'UPDATE_WEB3'
+export const ADD_CONTRACT = 'ADD_CONTRACT'
 
 /*
  * other constants
@@ -45,6 +46,10 @@ export function updateConnection(value) {
 
 export function updateWeb3(value) {
   return { type: UPDATE_WEB3, value}
+}
+
+export function addContract(value) {
+  return { type: ADD_CONTRACT, value}
 }
 
 
