@@ -1,19 +1,22 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { DrizzleProvider } from 'drizzle-react'
 import ReactDOM from 'react-dom';
-import store from './redux/store';
+import store from './state/store';
+import drizzleOptions from './state/drizzleOptions';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import getWeb3 from './util/manageWeb3';
+import getWeb3 from './util/getWeb3';
 import './index.css';
 
-getWeb3();
+// getWeb3();
 
 ReactDOM.render(
   <div className="App">
-    <Provider store={store}>
+    {/* <Provider store={store}> */}
+      <DrizzleProvider options={drizzleOptions} store={store}>
       <App />
-    </Provider>
+    </DrizzleProvider>
   </div>, 
 document.getElementById('root'));
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { drizzleConnect } from 'drizzle-react'
 import { withStyles } from '@material-ui/core/styles';
 
 import metamask from '../assets/metamask.svg';
@@ -58,8 +59,9 @@ class ConnectionCheck extends React.Component {
   }
 
   render() {
-    const { classes, connection, web3js } = this.props;
+    const { classes, connection, web3js, drizzleStatus } = this.props;
     console.log(`++ re render ${JSON.stringify(connection)}`)
+    console.log(`++ re render ${JSON.stringify(drizzleStatus)}`)
     if(!web3js || !connection.selectedAccount){
       if(!this.state.initialised){
         return (
@@ -94,11 +96,13 @@ class ConnectionCheck extends React.Component {
 const mapStateToProps = (state) => ({
   connection: state.connection,
   web3js: state.web3js,
+  drizzleStatus: state.drizzleStatus,
 })
 
-export default connect(
+export default drizzleConnect(
+  withStyles(styles)(ConnectionCheck),
   mapStateToProps
-)(withStyles(styles)(ConnectionCheck));
+);
 
 
 

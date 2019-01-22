@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
 import Balances from '../components/Balances';
-import Swap from '../components/Swap';
+import SwapContainer from '../components/SwapContainer';
 
 const styles = theme => ({
   root: {
@@ -125,7 +125,7 @@ class Home extends Component {
                 </AppBar> 
                 {
                   this.state.mainTabIndex === 0 && 
-                  <Swap onClick={() => this.showHideBackButton()} />
+                  <SwapContainer onClick={() => this.showHideBackButton()} />
                 }
                 {
                   this.state.mainTabIndex === 1 && 
