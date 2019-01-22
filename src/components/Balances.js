@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { drizzleConnect } from 'drizzle-react';
 import { withStyles } from '@material-ui/core/styles';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import List from '@material-ui/core/List';
@@ -23,50 +24,40 @@ const styles = theme => ({
 
 function BalanceList(props) {
 
-  let { tokens, classes, onHideToken, onTokenClick } = props;
-
-  function renderList(){
-    let list = [];
-
-    for (let i = 0; i < tokens.length; i++) {
-      list.push(
-        !tokens[i].hidden && 
-        <ListItem button key={`balance-${i}`} onClick={() => onTokenClick(i)}>
-          <ListItemIcon>
-            <TokenIcon symbol={tokens[i].symbol}></TokenIcon>
-          </ListItemIcon>
-          <ListItemText 
-            primary={tokens[i].symbol} 
-            secondary={tokens[i].balance} 
-          />
-          <ListItemSecondaryAction>
-            {
-              tokens[i].showActions &&
-              <IconButton aria-label="Hide">
-                <VisibilityOffIcon onClick={() => {onHideToken(i)}}></VisibilityOffIcon>
-              </IconButton>
-            }
-            {
-              !tokens[i].showActions &&
-              <ListItemText 
-                primary={''} 
-                secondary={tokens[i].usdVal} 
-              />   
-            }
-          </ListItemSecondaryAction>
-        </ListItem>
-      );
-    }
-
-    return ( 
-        <List>{list}</List>
-    );
-  }
+  let { tokens, onHideToken, onTokenClick } = props;
 
   return (
-    <div > 
-      { renderList() }
-    </div>
+    <List>
+      {tokens.map((tkn, i) => {
+        return (
+          !tkn.hidden && 
+          <ListItem button key={`balance-${i}`} onClick={() => onTokenClick(i)}>
+            <ListItemIcon>
+              <TokenIcon symbol={tkn.symbol}></TokenIcon>
+            </ListItemIcon>
+            <ListItemText 
+              primary={tkn.symbol} 
+              secondary={tkn.balance} 
+            />
+            <ListItemSecondaryAction>
+              {
+                tkn.showActions &&
+                <IconButton aria-label="Hide">
+                  <VisibilityOffIcon onClick={() => {onHideToken(i)}}></VisibilityOffIcon>
+                </IconButton>
+              }
+              {
+                !tkn.showActions &&
+                <ListItemText 
+                  primary={''} 
+                  secondary={tkn.usdVal} 
+                />   
+              }
+            </ListItemSecondaryAction>
+          </ListItem>
+        )
+      })}
+    </List>
   );
 }
 
@@ -215,7 +206,8 @@ const mapStateToProps = (state) => ({
   
 })
 
-export default connect(
+export default drizzleConnect(
+  withStyles(styles)(Balances),
   mapStateToProps
-)(withStyles(styles)(Balances));
+);
 
