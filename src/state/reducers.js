@@ -8,7 +8,7 @@ import {
   UPDATE_WEB3,
   ADD_CONTRACT,
 } from './actions'
-import { persistentReducer } from 'redux-pouchdb-plus';
+// import { persistentReducer } from 'redux-pouchdb-plus';
 import { combineReducers } from 'redux'
 
 
