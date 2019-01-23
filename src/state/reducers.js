@@ -1,36 +1,16 @@
 import {
-  INCREMENT_COUNT,
-  DECREMENT_COUNT,
-  INCREMENT_STACK,
-  DECREMENT_STACK,
   UPDATE_CONNECTION,
+  FETCH_BALANCE,
+  SET_BALANCE,
+  SET_BALANCE_ERROR,
+  HIDE_TOKEN,
+  TOGGLE_TOKEN,
   UPDATE_WEB3,
   ADD_CONTRACT,
 } from './actions'
 import { persistentReducer } from 'redux-pouchdb-plus';
 import { combineReducers } from 'redux'
 
-function count(state = { val: 0 }, action){
-  switch(action.type) {
-    case INCREMENT_COUNT:
-      return { val: state.val + 1 };
-    case DECREMENT_COUNT:
-      return { val: state.val - 1 };
-    default:
-      return state;
-  }
-};
-
-function stackCounter(state = [{ x: 0 }, { x: 1 }, { x: 2 }], action){
-  switch (action.type) {
-    case INCREMENT_STACK:
-      return state.concat({ x: state.length })
-    case DECREMENT_STACK:
-      return !state.length ? state : state.slice(0, state.length - 1)
-    default:
-      return state
-  }
-}
 
 function connection(state = {
   accounts: [],
@@ -46,6 +26,56 @@ function connection(state = {
       }
     default:
       return state
+  }
+}
+
+function balance(state = {
+  syncedAddress: "",
+  syncedBalances: [],
+  error: null,
+  isLoaded: false,
+}, action){
+  const isRefresh = state.syncedAddress === action.address;
+  let tokens = state.syncedBalances.slice();
+  switch(action.type){
+    case FETCH_BALANCE:
+      return {
+        syncedAddress: "",
+        syncedBalances: [],
+        error: null,
+        isLoaded: !isRefresh
+      }
+    case SET_BALANCE:
+      return {
+        syncedAddress: action.address,
+        syncedBalances: action.value,
+        error: null,
+        isLoaded: true,
+      }  
+    case SET_BALANCE_ERROR:
+      return {
+        syncedAddress: isRefresh ? state.syncedAddress : '',
+        syncedBalances: isRefresh ? state.syncedBalances : [],
+        isLoaded: true,
+        error: action.error
+      }
+    case HIDE_TOKEN:
+      let i = tokens.findIndex((tkn) => { return tkn.address === action.tokenAddress })
+      if (i > -1){
+        tokens[i].hidden = !tokens[i].hidden;
+      }
+      return {
+        ...state,
+        syncedBalances: tokens
+      }
+    case TOGGLE_TOKEN:
+      tokens[i].showActions = !tokens[i].showActions;
+      return {
+        ...state,
+        syncedBalances: tokens
+      }    
+    default:
+      return state;
   }
 }
 
@@ -71,13 +101,12 @@ function contracts(state = {}, action){
 }
 
 const reducers = combineReducers({
-  count: persistentReducer(count),
-  stackCounter: persistentReducer(stackCounter),
   connection,
+  balance,
   web3js,
   contracts
 })
 
-export { connection, web3js, count, contracts, stackCounter, reducers }
+export { connection, balance, web3js, contracts, reducers }
 
 export default reducers

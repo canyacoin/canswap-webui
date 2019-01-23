@@ -30,7 +30,7 @@ function BalanceList(props) {
               {
                 tkn.showActions &&
                 <IconButton aria-label="Hide">
-                  <VisibilityOffIcon onClick={() => {onHideToken(i)}}></VisibilityOffIcon>
+                  <VisibilityOffIcon onClick={() => {onHideToken(tkn.address)}}></VisibilityOffIcon>
                 </IconButton>
               }
               {
