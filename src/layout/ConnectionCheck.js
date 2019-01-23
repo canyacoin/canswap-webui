@@ -60,7 +60,8 @@ class ConnectionCheck extends React.Component {
   render() {
     const { classes, connection, web3js } = this.props;
     console.log(`++ re render ${JSON.stringify(connection)}`)
-    if(!web3js || !connection.selectedAccount){
+    const isCorrectNetwork = connection.network === process.env.REACT_APP_ETH_NETWORK;
+    if(!web3js || !connection.selectedAccount || !isCorrectNetwork){
       if(!this.state.initialised){
         return (
           <Loader padding={156}></Loader>
@@ -74,6 +75,12 @@ class ConnectionCheck extends React.Component {
           enabled." classes={classes} />
         )
       }
+      if(!isCorrectNetwork){
+        return (
+          <ConnectionError title="Wrong network" message={`CanSwap runs on the Ethereum ${process.env.REACT_APP_ETH_NETWORK} network,
+          please switch your Ethereum provider to this network`} classes={classes} />
+        )
+      }
       return (        
         <ConnectionError title="No ETH Account Available" message="It seems that you don&apos;t have an ETH account selected. If using
         MetaMask, please make sure that your wallet is unlocked and that
@@ -84,7 +91,7 @@ class ConnectionCheck extends React.Component {
     return (
       <div> 
         { this.props.children } 
-        { process.env.REACT_APP_NETWORK_ID } 
+        {  } 
         { connection.selectedAccount}  
       </div>
     )

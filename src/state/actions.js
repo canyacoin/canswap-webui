@@ -48,8 +48,8 @@ export function updateWeb3(value) {
   return { type: UPDATE_WEB3, value}
 }
 
-export function addContract(value) {
-  return { type: ADD_CONTRACT, value}
+export function addContract(name, value) {
+  return { type: ADD_CONTRACT, name, value}
 }
 
 

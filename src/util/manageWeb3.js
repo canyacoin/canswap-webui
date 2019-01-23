@@ -40,7 +40,7 @@ function initPoll() {
 
 function initContracts() {
   const canSwap = new web3js.eth.Contract(CanSwap.abi, process.env.REACT_APP_CANSWAP_ADDRESS);
-  store.dispatch(addContract(canSwap))
+  store.dispatch(addContract('CanSwap', canSwap))
 }
 
 function initNetworkPoll() {
@@ -95,15 +95,15 @@ function fetchNetwork() {
       } else {
         const network = () =>{
           switch (netId) {
-            case '1':
+            case 1:
               return 'MAINNET';
-            case '2':
+            case 2:
               return 'MORDEN';
-            case '3':
+            case 3:
               return 'ROPSTEN';
-            case '4':
+            case 4:
               return 'RINKEBY';
-            case '42':
+            case 42:
               return 'KOVAN';
             default:
               return 'UNKNOWN';

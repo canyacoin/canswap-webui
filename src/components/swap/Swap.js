@@ -13,15 +13,32 @@ const styles = theme => ({
 
 class Swap extends Component {
 
-  render() {
-    const { classes, contracts, connection } = this.props;
+  constructor(props){
+    super(props);
+    this.state = {
+      owner: ''
+    }
+    this.getOwner();
+  }
 
-    console.log(`+++ SwapContracts: ${contracts}`)
+  async getOwner(){
+    const { CanSwap } = this.props;
+    const owner = await CanSwap.methods.owner().call();
+    console.log(owner)
+    this.setState({
+      owner
+    })
+  }
+
+  render() {
+    const { classes, connection } = this.props;
+
+    console.log(`+++ SwapContracts: ${JSON.stringify(connection)}`)
 
     return (
       <div className={classes.root}>
         <Button onClick={() => this.props.onClick()} color="primary">
-          Click
+          Click {this.state.owner}
         </Button>
       </div>
     );

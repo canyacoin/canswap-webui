@@ -58,10 +58,13 @@ function web3js(state = {}, action){
   }
 }
 
-function contracts(state = [], action){
+function contracts(state = {}, action){
   switch(action.type) {
     case ADD_CONTRACT:
-      return state.concat(action.value)
+      return {
+        ...state,
+        [action.name]: action.value
+      }
     default:
       return state
   }

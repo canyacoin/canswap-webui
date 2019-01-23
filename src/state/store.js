@@ -15,7 +15,7 @@ const createStoreWithMiddleware = compose(
   persistentStore({
     db, 
     onReady: (store) => {
-      console.log(`++ Store ${store.getState()}`);
+      console.log(store.getState());
     }
   })
 )(createStore);
