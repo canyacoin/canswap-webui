@@ -30,7 +30,7 @@ export function updateConnection(value) {
 export function fetchBalance(address) {  
   return (dispatch) => {
 
-    // dispatch({ type: FETCH_BALANCE, address })
+    dispatch({ type: FETCH_BALANCE, address })
 
     let getUsdValue = (token) => {
       if(token.tokenInfo && token.tokenInfo.price) {
@@ -48,11 +48,7 @@ export function fetchBalance(address) {
 
     return fetch(`http://api.ethplorer.io/getAddressInfo/` +
     `${address}?apiKey=${process.env.REACT_APP_ETHPLORER_KEY}`, {
-      method: "GET",
-      headers: {
-        "Access-Control-Allow-Origin" : "*",
-        "Content-type": "application/json; charset=UTF-8"
-      }})
+      method: "GET" })
       .then(res => res.json())
       .then(
         (result) => {

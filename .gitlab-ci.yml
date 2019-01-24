@@ -20,7 +20,7 @@ dist:production:
     paths:
       - $APP_PATH/build
   script:
-    - echo $DOT_ENV >> $APP_PATH/.env
+    - echo $DOT_ENV_BASE64 | base64 -d > $APP_PATH/.env
     - yarn
     - yarn run build
 

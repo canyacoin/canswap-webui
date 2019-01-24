@@ -40,10 +40,9 @@ function balance(state = {
   switch(action.type){
     case FETCH_BALANCE:
       return {
-        syncedAddress: "",
-        syncedBalances: [],
+        ...state,
         error: null,
-        isLoaded: !isRefresh
+        isLoaded: isRefresh
       }
     case SET_BALANCE:
       return {
@@ -69,7 +68,7 @@ function balance(state = {
         syncedBalances: tokens
       }
     case TOGGLE_TOKEN:
-      tokens[i].showActions = !tokens[i].showActions;
+      tokens[action.index].showActions = !tokens[action.index].showActions;
       return {
         ...state,
         syncedBalances: tokens
