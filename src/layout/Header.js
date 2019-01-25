@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Lens from '@material-ui/icons/Lens';
 
 import { withStyles } from '@material-ui/core/styles';
-import logo from '../assets/logo.svg'
+import logo from 'assets/logo.svg'
 
 
 const styles = theme => ({

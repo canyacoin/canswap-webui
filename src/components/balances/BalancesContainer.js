@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Balances from './Balances'
-import { fetchBalance, hideToken, toggleTokenAction } from '../../state/actions'
+import { fetchBalance, hideToken, toggleTokenAction } from 'state/actions'
 
 
 const mapStateToProps = (state) => ({

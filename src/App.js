@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Home from './layout/Home';
-import Header from './layout/Header';
-import ConnectionCheck from './layout/ConnectionCheck';
+import Home from 'layout/Home';
+import Header from 'layout/Header';
+import ConnectionCheck from 'layout/ConnectionCheck';
 import './App.css';
 
 const theme = createMuiTheme({

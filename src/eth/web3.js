@@ -1,9 +1,9 @@
-import store from '../state/store'
-import { updateConnection, updateWeb3, addContract } from '../state/actions'
+import store from 'state/store'
+import { updateConnection, updateWeb3, addContract } from 'state/actions'
 import Web3 from 'web3'
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
-import CanSwap from '../assets/contracts/CanSwap.json'
+import CanSwap from 'assets/contracts/CanSwap.json'
 
 const ONE_SECOND = 1000;
 const ONE_MINUTE = ONE_SECOND * 60;
@@ -155,27 +155,30 @@ function handleChange() {
   }  
 }
 
-async function manageWeb3() {
-  web3js = await getWeb3();
-  store.dispatch(updateWeb3(web3js));
+const web3funcs = {
+  initWeb3: async () => {
+    web3js = await getWeb3();
+    store.dispatch(updateWeb3(web3js));
 
-  const unsubscribe = store.subscribe(() => handleChange())
-  window.addEventListener('beforeunload', () => unsubscribe());
+    const unsubscribe = store.subscribe(() => handleChange())
+    window.addEventListener('beforeunload', () => unsubscribe());
 
-  if(web3js) {
-    const accounts = getAccounts();
-  
-    fetchAccounts();
-    fetchNetwork();
-    initContracts();
-    initPoll();
-    initNetworkPoll();
-  
-    if (accounts) {
-      handleAccounts(accounts, true);
+    if(web3js) {
+      const accounts = getAccounts();
+    
+      fetchAccounts();
+      fetchNetwork();
+      initContracts();
+      initPoll();
+      initNetworkPoll();
+    
+      if (accounts) {
+        handleAccounts(accounts, true);
+      }
     }
   }
 }
 
 
-export default manageWeb3
+
+export default web3funcs

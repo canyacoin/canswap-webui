@@ -10,8 +10,8 @@ import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
-import BalancesContainer from '../components/balances/BalancesContainer';
-import SwapContainer from '../components/swap/SwapContainer';
+import BalancesContainer from 'components/balances/BalancesContainer';
+import SwapContainer from 'components/swap/SwapContainer';
 
 const styles = theme => ({
   root: {

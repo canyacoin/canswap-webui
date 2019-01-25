@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 
-import metamask from '../assets/metamask.svg';
-import Loader from '../elements/Loader';
+import metamask from 'assets/metamask.svg';
+import Loader from 'elements/Loader';
 
 
 const styles = () => ({
