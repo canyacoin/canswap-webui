@@ -75,42 +75,20 @@ export function initWeb3() {
 export function pollNetwork() {
   return async (dispatch, getState) => {
 
-    let web3js = await Web3Service.getWeb3();
     let connection = getState().connection;
   
-    const isV1 = /^1/.test(web3js.version);
-    const getNetwork = isV1 ? web3js.eth.net.getId : web3js.version.getNetwork;
-
-    getNetwork((err, netId) => {
-      if (err) {
+    Web3Service.getNetwork().then(network => {
+      if (network !== connection.network) {
         dispatch(updateConnection({
-          networkError: err
-        }));
-      } else {
-        const network = () =>{
-          switch (netId) {
-            case 1:
-              return 'MAINNET';
-            case 2:
-              return 'MORDEN';
-            case 3:
-              return 'ROPSTEN';
-            case 4:
-              return 'RINKEBY';
-            case 42:
-              return 'KOVAN';
-            default:
-              return 'UNKNOWN';
-          }
-        };
-        if (network() !== connection.network) {
-          dispatch(updateConnection({
-            networkError: null,
-            network: network()
-          }))
-        }
+          networkError: null,
+          network
+        }))
       }
-    });
+    }).catch(err => {
+      dispatch(updateConnection({
+        networkError: err
+      }));
+    })
   } 
 }
 

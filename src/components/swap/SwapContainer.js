@@ -3,7 +3,6 @@ import Swap from './Swap'
 
 const mapStateToProps = (state, ownProps) => ({
   connection: state.connection,
-  CanSwap: state.contracts['CanSwap'] || {},
   onClick: ownProps.onClick
 })
 

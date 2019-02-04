@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { getCanSwapContract } from '../../eth'
 
 
 const styles = theme => ({
@@ -22,12 +23,12 @@ class Swap extends Component {
   }
 
   async getOwner(){
-    const { CanSwap } = this.props;
-    // const owner = await CanSwap.methods.owner().call();
-    // console.log(owner)
-    // this.setState({
-    //   owner
-    // })
+    let CanSwap = await getCanSwapContract();
+    const owner = await CanSwap.methods.owner().call();
+    console.log(owner)
+    this.setState({
+      owner
+    })
   }
 
   render() {

@@ -17,6 +17,49 @@ const funcs = {
       }
     })
   },  
+  getNetID: () => {
+    return new Promise(async (resolve, reject) => {
+      const web3js = await funcs.getWeb3();
+      const isV1 = /^1/.test(web3js.version);
+      const getNetwork = isV1 ? web3js.eth.net.getId : web3js.version.getNetwork;
+
+      getNetwork((err, netId) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(netId)
+        }
+      });
+    })
+  },
+  getNetwork: () => {
+    return new Promise((resolve, reject) => {
+      funcs.getNetID().then(netId => {
+        switch (netId) {
+          case 1:
+            resolve('MAINNET') 
+            break
+          case 2:
+            resolve('MORDEN')
+            break
+          case 3:
+            resolve('ROPSTEN')
+            break
+          case 4:
+            resolve('RINKEBY')
+            break
+          case 42:
+            resolve('KOVAN')
+            break
+          default:
+            resolve('UNKNOWN')
+            break
+        }
+      }).catch(err => {
+        reject(err)
+      });
+    })
+  },
   amendWeb3: (web3) => {
     web3.eth.getTransactionReceiptMined = (txnHash, interval) => {
       var transactionReceiptAsync

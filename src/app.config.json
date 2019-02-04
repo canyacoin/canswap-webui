@@ -1,0 +1,7 @@
+{
+  "network" : "RINKEBY",
+  "canswap_addresses" : {
+      "MAINNET" : "",
+      "RINKEBY" : "0xcb005dc0bd266e2ff4a3d416dc51c292a7e297fb"
+  }
+}

@@ -1,4 +1,5 @@
-// import Web3Service from './web3'
+import Web3Service from './web3'
+import Contracts from './contracts'
 
 export { default as Web3Service } from './web3'
 
@@ -14,17 +15,19 @@ export { default as Web3Service } from './web3'
 //   //return new web3.eth.Contract(Contracts.Token.abi).at(tokenAddress)
 // }
 
-// /**
-//  *  Instantiates a Web3 contract object with the Multisender ABI at the Multisender address
-//  *  @return {Object} Web3 contract object
-//  */
-// const getCanswapContract = async () => {
-//   const web3 = await Web3Service.getWeb3()
-//   return new web3.eth.Contract(Contracts.Multisender.abi, Contracts.Multisender.address)
-// }
+/**
+ *  Instantiates a Web3 contract object with the CanSwap ABI at the CanSwap address
+ *  @return {Object} Web3 contract object
+ */
+export const getCanSwapContract = async () => {
+  const web3 = await Web3Service.getWeb3()
+  const netId = await Web3Service.getNetwork()
+  const contract = Contracts.CanSwap(netId)
+  return new web3.eth.Contract(contract.abi, contract.address)
+}
 
 // function getContract() {
-  // const canSwap = new web3js.eth.Contract(CanSwap.abi, process.env.REACT_APP_CANSWAP_ADDRESS);
+  // const canSwap = new web3js.eth.Contract(CanSwap.abi, );
   // store.dispatch(addContract('CanSwap', canSwap))
 // }
 

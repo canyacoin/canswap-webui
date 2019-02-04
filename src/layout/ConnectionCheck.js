@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import config from '../app.config';
 
 import metamask from 'assets/metamask.svg';
 import Loader from 'elements/Loader';
@@ -60,7 +61,7 @@ class ConnectionCheck extends React.Component {
   render() {
     const { classes, connection, web3js } = this.props;
     console.log(`++ re render ${JSON.stringify(connection)}`)
-    const isCorrectNetwork = connection.network === process.env.REACT_APP_ETH_NETWORK;
+    const isCorrectNetwork = connection.network === config.network;
     if(!web3js || !connection.selectedAccount || !isCorrectNetwork){
       if(!this.state.initialised){
         return (
@@ -77,7 +78,7 @@ class ConnectionCheck extends React.Component {
       }
       if(!isCorrectNetwork){
         return (
-          <ConnectionError title="Wrong network" message={`CanSwap runs on the Ethereum ${process.env.REACT_APP_ETH_NETWORK} network,
+          <ConnectionError title="Wrong network" message={`CanSwap runs on the Ethereum ${config.network} network,
           please switch your Ethereum provider to this network`} classes={classes} />
         )
       }
