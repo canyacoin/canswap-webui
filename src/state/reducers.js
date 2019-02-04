@@ -29,12 +29,12 @@ function connection(state = {
   }
 }
 
-function balance(state = {
+const balance = (state = {
   syncedAddress: "",
   syncedBalances: [],
   error: null,
   isLoaded: false,
-}, action){
+}, action) => {
   const isRefresh = state.syncedAddress === action.address;
   let tokens = state.syncedBalances.slice();
   switch(action.type){

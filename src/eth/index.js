@@ -23,6 +23,11 @@ export { default as Web3Service } from './web3'
 //   return new web3.eth.Contract(Contracts.Multisender.abi, Contracts.Multisender.address)
 // }
 
+// function getContract() {
+  // const canSwap = new web3js.eth.Contract(CanSwap.abi, process.env.REACT_APP_CANSWAP_ADDRESS);
+  // store.dispatch(addContract('CanSwap', canSwap))
+// }
+
 
 
 

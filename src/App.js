@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from 'layout/Home';
 import Header from 'layout/Header';
 import ConnectionCheck from 'layout/ConnectionCheck';
+import { initWeb3 } from './state/actions';
 import './App.css';
 
 const theme = createMuiTheme({
@@ -17,18 +19,18 @@ const theme = createMuiTheme({
   }
 });
 
+const App = ({dispatch}) => {
 
-class App extends Component {
-  render() {
-    return (
-      <ConnectionCheck>
-        <MuiThemeProvider theme={theme}>
-          <Header />
-          <Home />
-        </MuiThemeProvider>
-      </ConnectionCheck>
-    );
-  }
+  dispatch(initWeb3())
+  
+  return (
+    <ConnectionCheck>
+      <MuiThemeProvider theme={theme}>
+        <Header />
+        <Home />
+      </MuiThemeProvider>
+    </ConnectionCheck>
+  );
 }
 
-export default App;
+export default connect()(App);

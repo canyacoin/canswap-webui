@@ -23,11 +23,11 @@ class Swap extends Component {
 
   async getOwner(){
     const { CanSwap } = this.props;
-    const owner = await CanSwap.methods.owner().call();
-    console.log(owner)
-    this.setState({
-      owner
-    })
+    // const owner = await CanSwap.methods.owner().call();
+    // console.log(owner)
+    // this.setState({
+    //   owner
+    // })
   }
 
   render() {

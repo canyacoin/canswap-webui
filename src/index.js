@@ -4,10 +4,8 @@ import ReactDOM from 'react-dom';
 import store from 'state/store';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
-import { Web3Service } from 'eth';
 import './index.css';
 
-Web3Service.initWeb3();
 
 ReactDOM.render(
   <div className="App">
