@@ -6,13 +6,10 @@ const funcs = {
       var { ethereum, web3 } = window;
       
       if (ethereum) {
-        console.log('++ web3\twindow.ethereum detected');
         resolve(funcs.amendWeb3(new Web3(ethereum)));
       } else if (web3) {
-        console.log('++ web3\twindow.web3 detected');
         resolve(funcs.amendWeb3(new Web3(web3.currentProvider)));
       } else {
-        console.log('++ web3\tfallback web3');
         resolve(null)
       }
     })

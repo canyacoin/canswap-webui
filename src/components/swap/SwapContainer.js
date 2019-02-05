@@ -3,7 +3,7 @@ import Swap from './Swap'
 
 const mapStateToProps = (state, ownProps) => ({
   connection: state.connection,
-  onClick: ownProps.onClick
+  showHideBackButton: ownProps.showHideBackButton
 })
 
 export default connect(mapStateToProps)(Swap)

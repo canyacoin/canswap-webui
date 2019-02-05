@@ -38,7 +38,7 @@ class Swap extends Component {
 
     return (
       <div className={classes.root}>
-        <Button onClick={() => this.props.onClick()} color="primary">
+        <Button onClick={() => this.props.showHideBackButton()} color="primary">
           Click {this.state.owner}
         </Button>
       </div>

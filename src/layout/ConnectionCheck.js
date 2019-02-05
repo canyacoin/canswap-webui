@@ -60,7 +60,7 @@ class ConnectionCheck extends React.Component {
 
   render() {
     const { classes, connection, web3js } = this.props;
-    console.log(`++ re render ${JSON.stringify(connection)}`)
+    
     const isCorrectNetwork = connection.network === config.network;
     if(!web3js || !connection.selectedAccount || !isCorrectNetwork){
       if(!this.state.initialised){

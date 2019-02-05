@@ -6,18 +6,26 @@ import {
   HIDE_TOKEN,
   TOGGLE_TOKEN,
   UPDATE_WEB3,
-  ADD_CONTRACT,
+  UPDATE_POOLS
 } from './actions'
-// import { persistentReducer } from 'redux-pouchdb-plus';
+import { persistentReducer } from 'redux-pouchdb-plus';
 import { combineReducers } from 'redux'
 
 
-function connection(state = {
+export const PoolsStatus = {
+	INITIALIZED : 'initialized',
+	FETCHING : 'fetching',
+	SUCCESS : 'success',
+	EMPTY : 'empty',
+	ERROR : 'error'
+};
+
+const connection = (state = {
   accounts: [],
   network: null,
   networkError: null,
   selectedAccount: ''
-}, action){
+}, action) => {
   switch(action.type) {
     case UPDATE_CONNECTION:
       return {
@@ -78,7 +86,7 @@ const balance = (state = {
   }
 }
 
-function web3js(state = {}, action){
+const web3js = (state = {}, action) => {
   switch(action.type) {
     case UPDATE_WEB3:
       return action.value
@@ -87,12 +95,15 @@ function web3js(state = {}, action){
   }
 }
 
-function contracts(state = {}, action){
+const pools = (state = {
+  status: PoolsStatus.INITIALIZED,
+  list: []
+}, action) => {
   switch(action.type) {
-    case ADD_CONTRACT:
+    case UPDATE_POOLS:
       return {
         ...state,
-        [action.name]: action.value
+        ...action.data
       }
     default:
       return state
@@ -103,9 +114,9 @@ const reducers = combineReducers({
   connection,
   balance,
   web3js,
-  contracts
+  pools: persistentReducer(pools)
 })
 
-export { connection, balance, web3js, contracts, reducers }
+export { connection, balance, web3js, pools }
 
 export default reducers

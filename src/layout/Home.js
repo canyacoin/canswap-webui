@@ -12,6 +12,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 
 import BalancesContainer from 'components/balances/BalancesContainer';
 import SwapContainer from 'components/swap/SwapContainer';
+import Pools from 'components/pools/Pools';
 
 const styles = theme => ({
   root: {
@@ -125,12 +126,11 @@ class Home extends Component {
                 </AppBar> 
                 {
                   this.state.mainTabIndex === 0 && 
-                  <SwapContainer onClick={() => this.showHideBackButton()} />
+                  <SwapContainer showHideBackButton={() => this.showHideBackButton()} />
                 }
                 {
                   this.state.mainTabIndex === 1 && 
-                  <div>
-                  </div>
+                  <Pools showHideBackButton={() => this.showHideBackButton()}></Pools>
                 }
                 {
                   this.state.mainTabIndex === 2 && 

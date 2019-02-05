@@ -33,6 +33,8 @@ class Balances extends Component {
   render() {
     const { classes, balance, hideToken, toggleTokenAction  } = this.props;
 
+    // TODO - If loading, display overlay
+
     if (!balance.isLoaded) {
       return (
         <Loader padding={50}></Loader>
