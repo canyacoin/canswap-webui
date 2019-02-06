@@ -55,25 +55,36 @@ export function fetchPools() {
 
     const canswapContract = await getCanSwapContract()
 
-    canswapContract.methods.poolCount().call().then( async (poolCount) => {
+    canswapContract.methods.getPoolBalances().call().then( async (pools) => {
+      const poolCount = pools.token.length;
+      console.log(poolCount)
       if(poolCount <= 0){
         return dispatch(updatePools({
           status: PoolsStatus.EMPTY
         }))
       }
-      let pools = []
+      let sanitisedPools = []
       try {
         for(var i = 0; i < poolCount; i++){
-          let bal = await canswapContract.methods.getPoolBalanceById(i).call()
-          console.log(bal)
           let meta = await canswapContract.methods.getPoolMetaById(i).call()
-          console.log(meta)
-          pools.push({...bal, ...meta})
+          // TODO - get symbol/name (possibly can run this async and update the item in array in reducer)
+          // Remember if addr == 0x0 then > 
+          sanitisedPools.push({
+            token: pools.token[i], 
+            active: pools.active[i],
+            uri: meta.uri,
+            api: meta.api,
+            balTKN: pools.balTKN[i],
+            balCAN: pools.balCAN[i],
+            feeTKN: pools.feeTKN[i],
+            feeCAN: pools.feeCAN[i],
+          })
+
         }
 
         return dispatch(updatePools({
           status: PoolsStatus.SUCCESS,
-          list: pools
+          list: sanitisedPools
         }))
 
       } catch (e) {

@@ -2,7 +2,7 @@
   "network" : "RINKEBY",
   "canswap_addresses" : {
       "MAINNET" : "",
-      "RINKEBY" : "0xeae557d72753db2f26beb9eaf669834ab8024bcb"
+      "RINKEBY" : "0x8d948f25e394fc8865851c26549e36bb408de287"
   },
   "canyacoin_addresses" : {
     "MAINNET" : "0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0",

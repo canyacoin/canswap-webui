@@ -2,14 +2,52 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux'
 import { fetchPools } from '../../state/actions'
+import Grid from '@material-ui/core/Grid';
+import './Pools.scss';
 
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    backgroundColor: '#fff'
+    width: '100%'
+  },
+  poolView: {
+    background: "#fff",
+    minHeight: 80,
+    paddingTop: 20
   }
 });
+
+const Pool = ({pool, classes}) => {
+
+  return <div>
+        <Grid
+      className={classes.poolView}
+      container
+      direction="row"
+      justify="space-between"
+      alignItems="flex-start"
+    >
+      <Grid item xs={2}>
+        address: {pool.token}
+      </Grid>
+      <Grid item xs={2}>
+        uri: {pool.uri}
+      </Grid>
+      <Grid item xs={2}>
+        api: {pool.api}
+      </Grid>
+      <Grid item xs={2}>
+        active: {JSON.stringify(pool.active)}
+      </Grid>
+      <Grid item xs={2}>
+        balTKN: {pool.balTKN}
+      </Grid>
+      <Grid item xs={2}>
+        balCAN: {pool.balCAN}
+      </Grid>
+    </Grid>
+  </div>
+}
 
 class Pools extends Component {
 
@@ -17,7 +55,7 @@ class Pools extends Component {
     super(props);
   }
   
-  componentDidMount(){
+  componentWillMount(){
     this.props.fetchPools()
   }
 
@@ -28,9 +66,7 @@ class Pools extends Component {
       <div className={classes.root}>
         <span>{pools.status}</span>
         {
-          pools.list.map((pool, i) => <div key={`p-${i}`}>
-            {JSON.stringify(pool)}
-          </div>
+          pools.list.map((pool, i) => <Pool key={`p-${i}`} pool={pool} classes={classes} />
         )}
       </div>
     );

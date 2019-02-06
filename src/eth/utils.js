@@ -1,22 +1,6 @@
 import Web3Service from './web3'
 import Contracts, { ERC20 } from './contracts'
 
-
-/**
- *  Gets the number of decimals for the token at a given address
- *  @param tokenAddress {String} Public address of the token
- *  @return {Promise<Number>} Number of decimals of the token
- */
-export const getDecimals = async (tokenAddress) => {
-  const tokenContract = await getTokenContract(tokenAddress)
-  return new Promise((resolve, reject) => {
-    tokenContract.decimals.call((e, res) => {
-      if (e) return reject(e)
-      resolve(res)
-    })
-  })
-}
-
 /**
  *  Gets the balance of a given user for a given token
  *  @param tokenAddress {String} Public address of the token
@@ -28,6 +12,7 @@ export const getTokenBalance = async (tokenAddress, userAddress) => {
   return tokenContract.methods.balanceOf(userAddress).call()
 }
 
+
 /**
  *  Gets the symbol of a given token
  *  @param tokenAddress {String} Public address of the token
@@ -36,6 +21,16 @@ export const getTokenBalance = async (tokenAddress, userAddress) => {
 export const getTokenSymbol = async (tokenAddress) => {
   const tokenContract = await getTokenContract(tokenAddress)
   return tokenContract.methods.symbol().call()
+}
+
+/**
+ *  Gets the symbol of a given token
+ *  @param tokenAddress {String} Public address of the token
+ *  @return {Promise<String>} Symbol of the token
+ */
+export const getTokenName = async (tokenAddress) => {
+  const tokenContract = await getTokenContract(tokenAddress)
+  return tokenContract.methods.name().call()
 }
 
 /**
