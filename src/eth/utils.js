@@ -1,6 +1,11 @@
 import Web3Service from './web3'
 import Contracts, { ERC20 } from './contracts'
 
+
+export const isEthereumHex = (address) => {
+  return address == '0x0000000000000000000000000000000000000000'
+}
+
 /**
  *  Gets the balance of a given user for a given token
  *  @param tokenAddress {String} Public address of the token
@@ -13,6 +18,27 @@ export const getTokenBalance = async (tokenAddress, userAddress) => {
 }
 
 
+/**
+ *  Gets the name/symbol/decimals of a given token
+ *  @param tokenAddress {String} Public address of the token
+ *  @return {Promise<String>} Symbol of the token
+ */
+export const getTokenMeta = async (tokenAddress) => {
+  if(isEthereumHex(tokenAddress)){
+    return {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18
+    }
+  } else {
+    return {
+      name: await getTokenName(tokenAddress),
+      symbol: await getTokenSymbol(tokenAddress),
+      decimals: await getTokenDecimals(tokenAddress)
+    }
+  }
+
+}
 /**
  *  Gets the symbol of a given token
  *  @param tokenAddress {String} Public address of the token

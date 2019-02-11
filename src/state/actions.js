@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { Web3Service } from '../eth'
-import { getDecimals, getTokenBalance, getTokenSymbol, getTokenDecimals, getEthBalance, getTokenContract, getCanSwapContract } from '../eth'
+import { getDecimals, getTokenBalance, getTokenMeta, getEthBalance, getTokenContract, getCanSwapContract, isEthereumHex } from '../eth'
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { PoolsStatus } from './reducers'
@@ -66,18 +66,16 @@ export function fetchPools() {
       let sanitisedPools = []
       try {
         for(var i = 0; i < poolCount; i++){
-          let meta = await canswapContract.methods.getPoolMetaById(i).call()
           // TODO - get symbol/name (possibly can run this async and update the item in array in reducer)
-          // Remember if addr == 0x0 then > 
           sanitisedPools.push({
             token: pools.token[i], 
             active: pools.active[i],
-            uri: meta.uri,
-            api: meta.api,
             balTKN: pools.balTKN[i],
             balCAN: pools.balCAN[i],
             feeTKN: pools.feeTKN[i],
             feeCAN: pools.feeCAN[i],
+            ...await canswapContract.methods.getPoolMetaById(i).call(),
+            ...await getTokenMeta(pools.token[i])
           })
 
         }
