@@ -1,14 +1,21 @@
 import Web3 from 'web3'
 
+var web3singleton = null
+
 const funcs = {
   getWeb3: () => {
     return new Promise((resolve, reject) => {
+
+      if(web3singleton) return resolve(web3singleton)
+
       var { ethereum, web3 } = window;
       
       if (ethereum) {
-        resolve(funcs.amendWeb3(new Web3(ethereum)));
+        web3singleton = funcs.amendWeb3(new Web3(ethereum))
+        resolve(web3singleton);
       } else if (web3) {
-        resolve(funcs.amendWeb3(new Web3(web3.currentProvider)));
+        web3singleton = funcs.amendWeb3(new Web3(web3.currentProvider))
+        resolve(web3singleton);
       } else {
         resolve(null)
       }
