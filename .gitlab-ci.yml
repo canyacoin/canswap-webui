@@ -22,7 +22,7 @@ dist:production:
   script:
     - echo $DOT_ENV_BASE64 | base64 -d > $APP_PATH/.env
     - yarn
-    - react-scripts build
+    - yarn run build
 
 deploy:production:
   stage: deploy
