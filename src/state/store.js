@@ -1,8 +1,9 @@
 import { createStore, compose, applyMiddleware } from 'redux'
-import { persistentStore } from 'redux-pouchdb-plus';
+import { persistentStore } from 'redux-pouchdb-plus'
 import thunkMiddleware from 'redux-thunk';
 import PouchDB from 'pouchdb';
 import reducers from './reducers'
+import { pouchdbInitialised } from './actions'
 
 const initialState = {}
 
@@ -15,7 +16,7 @@ const createStoreWithMiddleware = compose(
   persistentStore({
     db, 
     onReady: (store) => {
-      console.log(store.getState());
+      store.dispatch(pouchdbInitialised())
     }
   })
 )(createStore);

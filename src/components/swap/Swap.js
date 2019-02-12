@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+
 import { getCanSwapContract } from '../../eth'
 
 
@@ -22,19 +23,22 @@ class Swap extends Component {
     this.getOwner();
   }
 
+  componentDidMount(){
+    this.props.changeTab()
+  }
+
+
   async getOwner(){
     let CanSwap = await getCanSwapContract();
     const owner = await CanSwap.methods.owner().call();
-    console.log(owner)
+    
     this.setState({
       owner
     })
   }
 
   render() {
-    const { classes, connection } = this.props;
-
-    console.log(`+++ SwapContracts: ${JSON.stringify(connection)}`)
+    const { classes } = this.props;
 
     return (
       <div className={classes.root}>

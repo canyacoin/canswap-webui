@@ -5,6 +5,11 @@ import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { PoolsStatus } from './reducers'
 
+export const POUCHDB_INIT = 'POUCHDB_INIT'
+
+export const TAB_CHANGE = 'TAB_CHANGE'
+export const BACK_CHANGE = 'BACK_CHANGE'
+
 export const UPDATE_CONNECTION = 'UPDATE_CONNECTION'
 
 export const UPDATE_WEB3 = 'UPDATE_WEB3'
@@ -17,6 +22,17 @@ export const TOGGLE_TOKEN = 'TOGGLE_TOKEN'
 
 export const UPDATE_POOLS = 'UPDATE_POOLS'
 
+export const pouchdbInitialised = () => {
+  return { type: POUCHDB_INIT }
+}
+
+export const changeTab = (index, mainTab = true) => {
+  return { type: TAB_CHANGE, index, mainTab}
+}
+
+export const changeBackButton = (show = true) => {
+  return { type: BACK_CHANGE, show }
+}
 
 export function updateConnection(value) {
   return { type: UPDATE_CONNECTION, value}

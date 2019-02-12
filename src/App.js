@@ -28,7 +28,7 @@ const App = ({dispatch}) => {
     <ConnectionCheck>
       <MuiThemeProvider theme={theme}>
         <Header />
-			  <Route path='/' render={() => <Home/>}/>
+			  <Route path='/' render={(props) => <Home {...props} />}/>
       </MuiThemeProvider>
     </ConnectionCheck>
   );

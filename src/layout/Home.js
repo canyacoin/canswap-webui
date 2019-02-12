@@ -1,84 +1,35 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Button from '@material-ui/core/Button';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route, Redirect, Link } from 'react-router-dom'
 
-import BalancesContainer from 'components/balances/BalancesContainer';
-import SwapContainer from 'components/swap/SwapContainer';
-import Pools from 'components/pools/Pools';
+import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import SwipeableViews from 'react-swipeable-views'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Button from '@material-ui/core/Button'
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 
+import { changeTab, changeBackButton } from '../state/actions'
+
+import BalancesContainer from 'components/balances/BalancesContainer'
+import SwapContainer from 'components/swap/SwapContainer'
+import Pools from 'components/pools/Pools'
+import styles from './HomeStyles'
 
 const routes = [
-  { label: 'Index', path: '/', hidden:true, exact:true, render: () => <Redirect to="/swap"/> },
   { label: 'Swap', path: '/swap', render: (props) => <SwapContainer {...props} />  },
   { label: 'Pools', path: '/pools', render: (props) => <Pools {...props} /> },
   { label: 'Arbitrage', path: '/arbitrage', render: (props) => <div></div> }
 ]
 
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    paddingLeft: 32,
-    paddingRight: 32,
-    paddingTop: 32,
-    [theme.breakpoints.up('md')]: {
-      paddingLeft: 96,
-      paddingRight: 96,
-      paddingTop: 48,
-    },
-  },
-  tabBar: {
-    backgroundColor: '#fff',
-    boxShadow: 'none',
-    minHeight: 48,
-    borderBottom: '1px solid #f8f8f8'
-  },
-  grow: {
-    flexGrow: 1
-  },
-  subContainer: {
-    flexGrow: 1,
-    borderRadius: 5
-  },
-  tabContents: {
-    minHeight: 500,
-    backgroundColor: '#fff',
-  },
-  mainContainer: {
-    flexGrow: 1,
-  },
-  toolbar: {
-    minHeight: 48
-  },
-});
-
 class Home extends Component {
 
-  state = {
-    subTabIndex: 0,
-    mainTabIndex: 0,
-    showBackButton: false
-  }
-
-
-  handleTabChange = (index, mainTab = true) => {
-    mainTab ? this.setState({ mainTabIndex: index }) : this.setState({ subTabIndex: index })
-  }
-
-  showHideBackButton = () => {
-    this.setState({ showBackButton: !this.state.showBackButton });
-  };
-
   render() {
-    const { classes } = this.props;
-
+    const { classes, layout: { mainTabIndex, subTabIndex, showBackButton }, changeTab, changeBackButton } = this.props
+    console.log(this.props.layout)
     return (
         <div className={classes.root}>
           <Grid container spacing={24}>
@@ -86,19 +37,18 @@ class Home extends Component {
               <div className={classes.SubContainer}>
                 <AppBar position="static" className={classes.tabBar}>
                   <Tabs
-                    value={this.state.subTabIndex}
-                    onChange={(event, value) => this.handleTabChange(value, false)}
+                    value={subTabIndex}
+                    onChange={(event, i) => changeTab(i, false)}
                     indicatorColor="primary"
-                    textColor="primary"
-                  >
+                    textColor="primary">
                     <Tab label="Assets" />
                     <Tab label="Stakes" />
                   </Tabs>
                 </AppBar>
                 <SwipeableViews
                   axis={'x'}
-                  index={this.state.subTabIndex}
-                  onChangeIndex={(index) => this.handleTabChange(index, false)}
+                  index={subTabIndex}
+                  onChangeIndex={(i) => changeTab(i, false)}
                   className={classes.tabContents}
                 >
                   <BalancesContainer />
@@ -109,42 +59,48 @@ class Home extends Component {
             <Grid item xs={9}>
               <div className={classes.mainContainer}>
                 <AppBar position="static" className={classes.tabBar}>
-                { 
-                  !this.state.showBackButton && 
-                  <Tabs value={this.state.mainTabIndex} 
-                        onChange={(_, value) => this.handleTabChange(value)}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        >
-                    {
-                      routes.map(
-                        ({label, path, hidden})=> !hidden && <Tab key={label} 
-                                              label={label} 
-                                              // className={classes.tabLink} 
-                                              component={Link} 
-                                              to={path} />
-                      )
-                    }
-                  </Tabs>
-                }
-                {
-                  this.state.showBackButton && 
-                  <Toolbar className={classes.toolbar} >
-                    <Button color="primary" onClick={() => this.showHideBackButton()}> 
-                      <KeyboardArrowLeft />
-                      Back
-                    </Button>
-                    <div className={classes.grow}></div>         
-                  </Toolbar>
-                }
+                  { 
+                    !showBackButton && 
+                    <Tabs value={mainTabIndex} 
+                          onChange={(_, value) => changeTab(value)}
+                          indicatorColor="primary"
+                          textColor="primary">
+                      {
+                        routes.map(({label, path, hidden}) => 
+                            <Tab key={label} 
+                            label={label} 
+                            component={Link} 
+                            to={path} />
+                        )
+                      }
+                    </Tabs>
+                  }
+                  {
+                    showBackButton && 
+                    <Toolbar className={classes.toolbar} >
+                      <Button color="primary"
+                              onClick={() => changeBackButton()}
+                              component={Link} 
+                              to={'/pools'}>
+                        <KeyboardArrowLeft />
+                        Back
+                      </Button>
+                      <div className={classes.grow}></div>         
+                    </Toolbar>
+                  }
                 </AppBar> 
+                <Route path='/' exact={true} render={() => <Redirect to="/swap"/>}/>
                 {
-                  routes.map(
-                    ({label, path, render, exact}) => {
-                      return <Route path={path} exact={exact} key={`route${label}`} render={(props) => {
-                        return render({showHideBackButton: () => this.showHideBackButton(), ...props})
-                      }} />
-                    })
+                  routes.map(({label, path, render}, index) => 
+                            <Route 
+                              path={path} 
+                              key={`route${label}`} 
+                              render={(props) => render({
+                                    showHideBackButton: () => this.showHideBackButton(), 
+                                    index, 
+                                    ...props })
+                                } /> 
+                            )
                 }
               </div>
             </Grid>
@@ -154,4 +110,13 @@ class Home extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Home);
+const mapStateToProps = (state) => ({
+  layout: state.layout
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  changeTab: (index, mainTab) => { dispatch(changeTab(index, mainTab)) },
+  changeBackButton: () => { dispatch(changeBackButton(false)) }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Home))

@@ -1,4 +1,7 @@
 import {
+  POUCHDB_INIT,
+  TAB_CHANGE,
+  BACK_CHANGE,
   UPDATE_CONNECTION,
   FETCH_BALANCE,
   SET_BALANCE,
@@ -19,6 +22,45 @@ export const PoolsStatus = {
 	EMPTY : 'empty',
 	ERROR : 'error'
 };
+
+const app = (state = {
+  initialised: false
+}, action = {}) => {
+  switch (action.type){
+    case POUCHDB_INIT:
+      return {
+        initialised: true
+      }
+    default: 
+      return state
+  }
+  
+}
+
+const layout = (state = {
+  subTabIndex: 0,
+  mainTabIndex: 0,
+  showBackButton: false
+}, action = {}) => {
+  switch (action.type) {
+    case TAB_CHANGE:
+    console.log("WHaaaat");
+      return {
+        ...state,
+        ...(action.mainTab ? { mainTabIndex: action.index } : { subTabIndex: action.index })
+      }
+    case BACK_CHANGE:
+    console.log("WHaaa33333at");
+      return {
+        ...state,
+        showBackButton: action.show
+      }
+    default:
+
+    console.log("WHaa4444444aat++ " + action.type);
+      return state
+  }
+}
 
 const connection = (state = {
   accounts: [],
@@ -111,12 +153,14 @@ const pools = (state = {
 }
 
 const reducers = combineReducers({
+  app,
+  layout: persistentReducer(layout),
   connection,
   balance,
   web3js,
   pools: persistentReducer(pools)
 })
 
-export { connection, balance, web3js, pools }
+export { app, layout, connection, balance, web3js, pools }
 
 export default reducers

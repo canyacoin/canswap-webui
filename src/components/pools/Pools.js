@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
-import { fetchPools } from '../../state/actions'
+import { fetchPools, changeTab } from '../../state/actions'
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
@@ -9,7 +9,6 @@ import { Route, Link } from 'react-router-dom'
 
 import CreatePool from './CreatePool'
 import './Pools.scss';
-
 
 
 const styles = theme => ({
@@ -24,7 +23,6 @@ const styles = theme => ({
 });
 
 const Pool = ({pool, classes}) => {
-
   return <div>
         <Grid
       className={classes.poolView}
@@ -56,37 +54,40 @@ const Pool = ({pool, classes}) => {
 }
 
 const PoolList = ({classes, match, pools}) => {
-  return (
-    <div>    
-      <span>{pools.status}</span>
-      {
-        pools.list.map((pool, i) => <Pool key={`p-${i}`} pool={pool} classes={classes} />
-      )}
-      <br/>
-      <Fab component={Link} to={`${match.url}/create`}
-        color="primary" aria-label="Add" className={classes.fab}>
-        <AddIcon />
-      </Fab>
-    </div>
-  )
+    return (
+      <div>    
+        <span>{pools.status}</span>
+        {
+          pools.list.map((pool, i) => <Pool key={`p-${i}`} pool={pool} classes={classes} />
+        )}
+        <br/>
+        <Fab component={Link} to={`${match.url}/create`}
+          color="primary" aria-label="Add" className={classes.fab}>
+          <AddIcon />
+        </Fab>
+      </div>
+    )
 }
+
+
 
 class Pools extends Component {
 
-  componentWillMount(){
+  componentDidMount(){
     this.props.fetchPools()
+    this.props.changeTab()
   }
 
   render() {
     const { classes, match, pools } = this.props;
-
+    
     return (
       <div className={classes.root}>
         <Route path={match.url} exact={true} render={(props) => 
           <PoolList classes={classes} pools={pools} {...props}/>
         } />
-        <Route path={`${match.url}/create`} render={() => 
-          <CreatePool />
+        <Route path={`${match.url}/create`} render={(props) => 
+          <CreatePool {...props}/>
         } />
       </div> 
     )
@@ -96,11 +97,12 @@ class Pools extends Component {
 const mapStateToProps = (state, ownProps) => ({
   connection: state.connection,
   pools: state.pools,
-  showHideBackButton: ownProps.showHideBackButton
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchPools: () => { dispatch(fetchPools()) }
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  fetchPools: () => { dispatch(fetchPools()) },
+  changeTab: () => { 
+    console.log("Pools:updating");dispatch(changeTab(ownProps.index)) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Pools))

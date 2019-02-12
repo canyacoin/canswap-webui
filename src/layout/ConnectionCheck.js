@@ -59,11 +59,11 @@ class ConnectionCheck extends React.Component {
   }
 
   render() {
-    const { classes, connection, web3js } = this.props;
+    const { classes, connection, web3js, app: { initialised: reduxInitialised } } = this.props;
     
     const isCorrectNetwork = connection.network === config.network;
-    if(!web3js || !connection.selectedAccount || !isCorrectNetwork){
-      if(!this.state.initialised){
+    if(!this.state.initialised || !reduxInitialised || !web3js || !connection.selectedAccount || !isCorrectNetwork){
+      if(!this.state.initialised || !reduxInitialised){
         return (
           <Loader padding={156}></Loader>
         );
@@ -100,6 +100,7 @@ class ConnectionCheck extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  app: state.app,
   connection: state.connection,
   web3js: state.web3js,
 })

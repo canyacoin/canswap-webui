@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
   balance: state.balance,
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   refreshBalance: (address) => {
     dispatch(fetchBalance(address))
   },
