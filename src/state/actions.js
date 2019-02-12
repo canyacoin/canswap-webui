@@ -205,7 +205,7 @@ export function fetchBalance(address) {
       return parseFloat(usdVal.toPrecision(10))
     }
 
-    return fetch(`http://api.ethplorer.io/getAddressInfo/` +
+    return fetch(`https://api.ethplorer.io/getAddressInfo/` +
     `${address}?apiKey=${process.env.REACT_APP_ETHPLORER_KEY}`, {
       method: "GET" })
       .then(res => res.json())
