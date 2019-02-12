@@ -3,7 +3,7 @@ import Contracts, { ERC20 } from './contracts'
 
 
 export const isEthereumHex = (address) => {
-  return address == '0x0000000000000000000000000000000000000000'
+  return address === '0x0000000000000000000000000000000000000000'
 }
 
 /**

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { Web3Service } from '../eth'
-import { getDecimals, getTokenBalance, getTokenMeta, getEthBalance, getTokenContract, getCanSwapContract, isEthereumHex } from '../eth'
+import { getTokenMeta, getCanSwapContract } from '../eth'
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
 import { PoolsStatus } from './reducers'
@@ -46,7 +46,6 @@ export function updatePools(data) {
   return { type: UPDATE_POOLS, data }
 }
 
-
 export function fetchPools() {
   return async (dispatch, getState) => {
     dispatch(updatePools({
@@ -77,7 +76,6 @@ export function fetchPools() {
             ...await canswapContract.methods.getPoolMetaById(i).call(),
             ...await getTokenMeta(pools.token[i])
           })
-
         }
 
         return dispatch(updatePools({
@@ -100,6 +98,10 @@ export function fetchPools() {
     })
   }
 } 
+
+export function createPool() {
+
+}
 
 
 export function pollNetwork() {

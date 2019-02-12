@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from 'layout/Home';
+import { Route } from 'react-router-dom'
 import Header from 'layout/Header';
 import ConnectionCheck from 'layout/ConnectionCheck';
 import { initWeb3 } from './state/actions';
@@ -27,7 +28,7 @@ const App = ({dispatch}) => {
     <ConnectionCheck>
       <MuiThemeProvider theme={theme}>
         <Header />
-        <Home />
+			  <Route path='/' render={() => <Home/>}/>
       </MuiThemeProvider>
     </ConnectionCheck>
   );

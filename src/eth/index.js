@@ -1,6 +1,6 @@
-import Web3Service from './web3'
-import { getDecimals, getTokenBalance, getTokenSymbol, getTokenDecimals, getEthBalance, getTokenContract, getCanSwapContract } from './utils'
-import Contracts from './contracts'
+// import Web3Service from './web3'
+// import { getDecimals, getTokenBalance, getTokenSymbol, getTokenDecimals, getEthBalance, getTokenContract, getCanSwapContract } from './utils'
+// import Contracts from './contracts'
 
 export { default as Web3Service } from './web3'
 export * from './utils'

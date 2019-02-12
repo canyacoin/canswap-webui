@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import SwipeableViews from 'react-swipeable-views';
@@ -9,10 +8,19 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import { Route, Redirect, Link } from 'react-router-dom'
 
 import BalancesContainer from 'components/balances/BalancesContainer';
 import SwapContainer from 'components/swap/SwapContainer';
 import Pools from 'components/pools/Pools';
+
+
+const routes = [
+  { label: 'Index', path: '/', hidden:true, exact:true, render: () => <Redirect to="/swap"/> },
+  { label: 'Swap', path: '/swap', render: (props) => <SwapContainer {...props} />  },
+  { label: 'Pools', path: '/pools', render: (props) => <Pools {...props} /> },
+  { label: 'Arbitrage', path: '/arbitrage', render: (props) => <div></div> }
+]
 
 const styles = theme => ({
   root: {
@@ -57,7 +65,8 @@ class Home extends Component {
     subTabIndex: 0,
     mainTabIndex: 0,
     showBackButton: false
-  };
+  }
+
 
   handleTabChange = (index, mainTab = true) => {
     mainTab ? this.setState({ mainTabIndex: index }) : this.setState({ subTabIndex: index })
@@ -102,15 +111,20 @@ class Home extends Component {
                 <AppBar position="static" className={classes.tabBar}>
                 { 
                   !this.state.showBackButton && 
-                  <Tabs
-                    value={this.state.mainTabIndex}
-                    onChange={(event, value) => this.handleTabChange(value)}
-                    indicatorColor="primary"
-                    textColor="primary"
-                  >
-                    <Tab label="Swap" />
-                    <Tab label="Pools" />
-                    <Tab label="Arbitrage" />
+                  <Tabs value={this.state.mainTabIndex} 
+                        onChange={(_, value) => this.handleTabChange(value)}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        >
+                    {
+                      routes.map(
+                        ({label, path, hidden})=> !hidden && <Tab key={label} 
+                                              label={label} 
+                                              // className={classes.tabLink} 
+                                              component={Link} 
+                                              to={path} />
+                      )
+                    }
                   </Tabs>
                 }
                 {
@@ -125,17 +139,12 @@ class Home extends Component {
                 }
                 </AppBar> 
                 {
-                  this.state.mainTabIndex === 0 && 
-                  <SwapContainer showHideBackButton={() => this.showHideBackButton()} />
-                }
-                {
-                  this.state.mainTabIndex === 1 && 
-                  <Pools showHideBackButton={() => this.showHideBackButton()}></Pools>
-                }
-                {
-                  this.state.mainTabIndex === 2 && 
-                  <div>
-                  </div>
+                  routes.map(
+                    ({label, path, render, exact}) => {
+                      return <Route path={path} exact={exact} key={`route${label}`} render={(props) => {
+                        return render({showHideBackButton: () => this.showHideBackButton(), ...props})
+                      }} />
+                    })
                 }
               </div>
             </Grid>
@@ -144,9 +153,5 @@ class Home extends Component {
     )
   }
 }
-
-Home.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles, { withTheme: true })(Home);

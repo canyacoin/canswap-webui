@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import store from 'state/store';
 import * as serviceWorker from './serviceWorker';
@@ -10,7 +11,9 @@ import './index.css';
 ReactDOM.render(
   <div className="App">
     <Provider store={store}>
-      <App />
+      <Router>
+        <Route path="/:url?" component={App}></Route>
+      </Router>
     </Provider>
   </div>, 
 document.getElementById('root'));

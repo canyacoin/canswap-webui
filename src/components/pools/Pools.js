@@ -1,9 +1,15 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
 import { fetchPools } from '../../state/actions'
 import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
+import { Route, Link } from 'react-router-dom'
+
+import CreatePool from './CreatePool'
 import './Pools.scss';
+
 
 
 const styles = theme => ({
@@ -49,27 +55,41 @@ const Pool = ({pool, classes}) => {
   </div>
 }
 
+const PoolList = ({classes, match, pools}) => {
+  return (
+    <div>    
+      <span>{pools.status}</span>
+      {
+        pools.list.map((pool, i) => <Pool key={`p-${i}`} pool={pool} classes={classes} />
+      )}
+      <br/>
+      <Fab component={Link} to={`${match.url}/create`}
+        color="primary" aria-label="Add" className={classes.fab}>
+        <AddIcon />
+      </Fab>
+    </div>
+  )
+}
+
 class Pools extends Component {
 
-  constructor(props){
-    super(props);
-  }
-  
   componentWillMount(){
     this.props.fetchPools()
   }
 
   render() {
-    const { classes, pools, connection } = this.props;
+    const { classes, match, pools } = this.props;
 
     return (
       <div className={classes.root}>
-        <span>{pools.status}</span>
-        {
-          pools.list.map((pool, i) => <Pool key={`p-${i}`} pool={pool} classes={classes} />
-        )}
-      </div>
-    );
+        <Route path={match.url} exact={true} render={(props) => 
+          <PoolList classes={classes} pools={pools} {...props}/>
+        } />
+        <Route path={`${match.url}/create`} render={() => 
+          <CreatePool />
+        } />
+      </div> 
+    )
   }
 }
 
