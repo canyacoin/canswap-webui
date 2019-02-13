@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Loader from 'elements/Loader';
+import { Loader } from 'elements';
 import BalanceList from './BalanceList';
 
 const styles = theme => ({

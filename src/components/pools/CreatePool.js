@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles'
 import { connect } from 'react-redux'
-import { changeBackButton } from '../../state/actions'
+
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles'
+
+import { changeBackButton, createPool } from 'state/actions'
 
 const styles = () => ({
 
@@ -15,7 +18,7 @@ class CreatePool extends Component {
   }
 
   render(){
-    return <div>xx</div>
+    return <div><Button onClick={() => {this.props.createPool()}}>click me</Button></div>
   } 
 }
 
@@ -23,7 +26,8 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  changeBackButton: () => { dispatch(changeBackButton()) }
+  changeBackButton: () => { dispatch(changeBackButton()) },
+  createPool: () => { dispatch(createPool()) }
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CreatePool))

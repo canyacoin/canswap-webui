@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import Swap from './Swap'
 
-import { changeTab } from '../../state/actions'
+import { changeTab } from 'state/actions'
 
 const mapStateToProps = (state, ownProps) => ({
   connection: state.connection,

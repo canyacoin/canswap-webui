@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import config from '../app.config';
 
 import metamask from 'assets/metamask.svg';
-import Loader from 'elements/Loader';
+import { Loader } from 'elements';
 
 
 const styles = () => ({

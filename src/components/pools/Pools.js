@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchPools, changeTab } from '../../state/actions'
+
+import { withStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid';
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
-import { Route, Link } from 'react-router-dom'
+
+import { fetchPools, changeTab } from 'state/actions'
 
 import CreatePool from './CreatePool'
 import './Pools.scss';

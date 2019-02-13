@@ -12,15 +12,13 @@ import Tab from '@material-ui/core/Tab'
 import Button from '@material-ui/core/Button'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 
-import { changeTab, changeBackButton } from '../state/actions'
+import { changeTab, changeBackButton } from 'state/actions'
+import { Balances, Pools, Swap } from 'components'
 
-import BalancesContainer from 'components/balances/BalancesContainer'
-import SwapContainer from 'components/swap/SwapContainer'
-import Pools from 'components/pools/Pools'
 import styles from './HomeStyles'
 
 const routes = [
-  { label: 'Swap', path: '/swap', render: (props) => <SwapContainer {...props} />  },
+  { label: 'Swap', path: '/swap', render: (props) => <Swap {...props} />  },
   { label: 'Pools', path: '/pools', render: (props) => <Pools {...props} /> },
   { label: 'Arbitrage', path: '/arbitrage', render: (props) => <div></div> }
 ]
@@ -51,7 +49,7 @@ class Home extends Component {
                   onChangeIndex={(i) => changeTab(i, false)}
                   className={classes.tabContents}
                 >
-                  <BalancesContainer />
+                  <Balances />
                   <div>Item Two</div>
                 </SwipeableViews>
               </div>

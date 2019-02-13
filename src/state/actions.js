@@ -1,11 +1,15 @@
 import { BigNumber } from 'bignumber.js';
-import { Web3Service } from '../eth'
-import { getTokenMeta, getCanSwapContract } from '../eth'
+import md5 from 'md5';
 import isEmpty from 'lodash/isEmpty';
 import range from 'lodash/range';
+
+import { Web3Service, getTokenMeta, getCanSwapContract } from 'eth'
 import { PoolsStatus } from './reducers'
+import { NotificationType } from 'elements'
 
 export const POUCHDB_INIT = 'POUCHDB_INIT'
+export const NOTIFICATION_ADD = 'NOTIFICATION_ADD'
+export const NOTIFICATION_REMOVE = 'NOTIFICATION_REMOVE'
 
 export const TAB_CHANGE = 'TAB_CHANGE'
 export const BACK_CHANGE = 'BACK_CHANGE'
@@ -21,6 +25,26 @@ export const HIDE_TOKEN = 'HIDE_TOKEN'
 export const TOGGLE_TOKEN = 'TOGGLE_TOKEN'
 
 export const UPDATE_POOLS = 'UPDATE_POOLS'
+
+export const notificationAdd = (text, type, duration, identifier) => {
+	return {
+		type : NOTIFICATION_ADD,
+		item : {
+			id : md5(text + Date() + Math.random()),
+			text : text,
+			type : type || NotificationType.NOTIFICATION,
+			duration : duration,
+			identifier : identifier
+		} 
+	}
+}
+
+export const notificationRemove = (id) => {
+	return {
+		type : NOTIFICATION_REMOVE,
+		id : id	
+	}
+}
 
 export const pouchdbInitialised = () => {
   return { type: POUCHDB_INIT }
@@ -116,7 +140,30 @@ export function fetchPools() {
 } 
 
 export function createPool() {
+	return async (dispatch, getState) => {
+		
+		// set create.sending
 
+    // get state // web3
+    
+
+		// get token address to swap FROM
+
+		// get the can token address 
+
+    dispatch(approvalDenied())
+	}
+}
+
+export const approvalDenied = () => {
+	return async dispatch => {
+		dispatch(notificationAdd(
+			'Whoops! Vital transactions were denied.',
+			NotificationType.WARNING,
+			5000
+		))
+		window.scrollTo(0, 0)
+	}
 }
 
 

@@ -2,7 +2,7 @@ import Web3Service from './web3'
 import BigNumber from 'bignumber.js'
 import { getTokenContract, getCanSwapAddress } from './utils'
 
-export { default as Web3Service } from './web3'
+export {default as Web3Service, getNetwork, getNetID, getWeb3} from './web3'
 export * from './utils'
 
 

@@ -1,5 +1,7 @@
 import {
   POUCHDB_INIT,
+  NOTIFICATION_ADD,
+  NOTIFICATION_REMOVE,
   TAB_CHANGE,
   BACK_CHANGE,
   UPDATE_CONNECTION,
@@ -24,13 +26,28 @@ export const PoolsStatus = {
 };
 
 const app = (state = {
-  initialised: false
+  initialised: false,
+	notifications : [ ],
 }, action = {}) => {
   switch (action.type){
     case POUCHDB_INIT:
       return {
+        ...state,
         initialised: true
-      }
+      }    
+		case NOTIFICATION_ADD:
+      return {
+        ...state,
+        notifications : [
+          ...state.notifications,
+          action.item
+        ]
+      };
+    case NOTIFICATION_REMOVE:
+      return {
+        ...state,
+        notifications : state.notifications.filter( n => n.id !== action.id )
+      };
     default: 
       return state
   }

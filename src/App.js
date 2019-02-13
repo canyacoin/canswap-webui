@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Home from 'layout/Home';
 import { Route } from 'react-router-dom'
-import Header from 'layout/Header';
-import ConnectionCheck from 'layout/ConnectionCheck';
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+import { Notification } from 'elements'
+
+import { ConnectionCheck, Header, Home } from 'layout';
 import { initWeb3 } from './state/actions';
-import './App.css';
 
 const theme = createMuiTheme({
   palette: {
@@ -28,6 +29,7 @@ const App = ({dispatch}) => {
     <ConnectionCheck>
       <MuiThemeProvider theme={theme}>
         <Header />
+			  <Notification/>
 			  <Route path='/' render={(props) => <Home {...props} />}/>
       </MuiThemeProvider>
     </ConnectionCheck>
