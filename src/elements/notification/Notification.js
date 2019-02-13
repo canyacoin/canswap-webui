@@ -55,8 +55,7 @@ const styles1 = theme => ({
   },
 });
 
-function MySnackbarContent(props) {
-  const { classes, className, message, onClose, variant, ...other } = props;
+const MySnackbarContent = ({ classes, className, message, onClose, variant, ...other }) => {
   const Icon = variantIcon[variant];
 
   return (
@@ -87,39 +86,35 @@ function MySnackbarContent(props) {
 
 const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
-class Snackbars extends React.Component {
+const Snackbars = ({dispatch, notifications}) => {
 
-  onClose(event, reason, id) {
+  const onClose = (event, reason, id) => {
     if (reason === 'clickaway') {
       return;
     }
-    this.props.dispatch(notificationRemove(id))
+    dispatch(notificationRemove(id))
   }
 
-  render() {
-    const { notifications } = this.props;
-
-    return (
-      <div>		  
-        {notifications.map( (notification, i) => <Snackbar
-          key={i}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          open={!notification.closed}
-          autoHideDuration={notification.duration}
-          onClose={(event, reason) => this.onClose(event, reason, notification.id)}
-        >        
-          <MySnackbarContentWrapper
-              onClose={(event, reason) => this.onClose(event, reason, notification.id)}
-              {...notification}
-            />
-        
-        </Snackbar> )}
-      </div>
-    );
-  }
+  return (
+    <div>		  
+      {notifications.map( (notification, i) => <Snackbar
+        key={i}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={!notification.closed}
+        autoHideDuration={notification.duration}
+        onClose={(event, reason) => onClose(event, reason, notification.id)}
+      >        
+        <MySnackbarContentWrapper
+            onClose={(event, reason) => onClose(event, reason, notification.id)}
+            {...notification}
+          />
+      
+      </Snackbar> )}
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({
