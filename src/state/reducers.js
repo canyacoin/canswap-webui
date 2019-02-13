@@ -46,7 +46,7 @@ const app = (state = {
     case NOTIFICATION_REMOVE:
       return {
         ...state,
-        notifications : state.notifications.filter( n => n.id !== action.id )
+        notifications : state.notifications.map(x => x.id !== action.id ? x : {...x, closed: 'true'})
       };
     default: 
       return state

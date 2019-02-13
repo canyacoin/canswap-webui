@@ -89,8 +89,11 @@ const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
 
 class Snackbars extends React.Component {
 
-  onClose(id) {
-    setTimeout(() => this.props.dispatch(notificationRemove(id)), 500)
+  onClose(event, reason, id) {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.props.dispatch(notificationRemove(id))
   }
 
   render() {
@@ -106,11 +109,10 @@ class Snackbars extends React.Component {
           }}
           open={!notification.closed}
           autoHideDuration={notification.duration}
-          onClose={() => this.onClose(notification.id)}
-        >
-        
+          onClose={(event, reason) => this.onClose(event, reason, notification.id)}
+        >        
           <MySnackbarContentWrapper
-              onClose={() => this.onClose(notification.id)}
+              onClose={(event, reason) => this.onClose(event, reason, notification.id)}
               {...notification}
             />
         
