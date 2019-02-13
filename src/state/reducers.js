@@ -129,7 +129,7 @@ const balance = (state = {
 }
 
 const web3js = (state = {
-  
+
 }, action) => {
   switch(action.type) {
     case UPDATE_WEB3:
@@ -160,7 +160,7 @@ const reducers = combineReducers({
   connection,
   balance,
   web3js,
-  pools: persistentReducer(pools)
+  pools: persistentReducer(pools, {name: 'pools-reducer'})
 })
 
 export { app, layout, connection, balance, web3js, pools }
