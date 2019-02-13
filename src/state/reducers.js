@@ -110,7 +110,7 @@ const balance = (state = {
       }
     case HIDE_TOKEN:
       let i = tokens.findIndex((tkn) => { return tkn.address === action.tokenAddress })
-      if (i > -1){
+      if (i > -1) {
         tokens[i].hidden = !tokens[i].hidden;
       }
       return {
@@ -128,7 +128,9 @@ const balance = (state = {
   }
 }
 
-const web3js = (state = {}, action) => {
+const web3js = (state = {
+  
+}, action) => {
   switch(action.type) {
     case UPDATE_WEB3:
       return action.value
@@ -154,7 +156,7 @@ const pools = (state = {
 
 const reducers = combineReducers({
   app,
-  layout: persistentReducer(layout),
+  layout,
   connection,
   balance,
   web3js,
