@@ -251,7 +251,7 @@ export function initWeb3() {
 
       acc = setInterval(() => {
 				dispatch(pollAccounts())
-      }, 1000);
+      }, 4000);
       net = setInterval(() => {
 				dispatch(pollNetwork())
 			}, 60000);

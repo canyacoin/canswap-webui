@@ -1,29 +1,31 @@
 import { abi as CanSwapABI } from '../assets/contracts/CanSwap'
 import { abi as ERC20ABI } from '../assets/contracts/IERC20'
 import { canswap_addresses as CanSwapAddresses, canyacoin_addresses as CanYaCoinAddresses } from '../app.config'
+import { getNetwork } from './web3'
 
 export const ERC20 = {
   abi: ERC20ABI
 }
 
-
-const CanSwapContract = (network = 'MAINNET') => {
+export const CanSwapContract = async () => {
+  const net = await getNetwork()
   return {
-    address : CanSwapAddresses[network] ? CanSwapAddresses[network] : CanSwapAddresses[1],
+    address : CanSwapAddresses[net] ? CanSwapAddresses[net] : CanSwapAddresses["MAINNET"],
     abi : CanSwapABI
   }
 }
 
-const CanYaCoinContract = (network = 'MAINNET') => {
-  return {
-    address : CanYaCoinAddresses[network] ? CanYaCoinAddresses[network] : CanYaCoinAddresses[1],
+export const CanYaCoinContract = async () => {
+  const net = await getNetwork()
+  return  {
+    address : CanYaCoinAddresses[net] ? CanYaCoinAddresses[net] : CanYaCoinAddresses["MAINNET"],
     abi : ERC20ABI
   }
 }
 
 const Contracts = {
-  CanSwap : CanSwapContract,
-  CanYaCoin: CanYaCoinContract
-};
+  CanSwapContract,
+  CanYaCoinContract
+}
 
 export default Contracts;
