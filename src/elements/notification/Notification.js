@@ -1,57 +1,128 @@
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from 'react-redux'
-import { notificationRemove } from 'state/actions'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
+import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
-import './Notification.scss'
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import WarningIcon from '@material-ui/icons/Warning';
+import { withStyles } from '@material-ui/core/styles';
+import { notificationRemove } from 'state/actions'
 
-// notification types
+
 export const NotificationType = {
+	SUCCESS : 'success',
 	WARNING : 'warning',
-	NOTIFICATION : 'notification',
-	SUCCESS : 'success'
+	ERROR : 'error',
+	INFO : 'info',
 }
 
-class NotificationItem extends React.Component{
-	
-	state = { open: false }
-	transitionSpeed = 200;
-	style = { transition : 'all ' + this.transitionSpeed + 'ms ease-in-out' }
-	timeout = window.setTimeout(()=>{},0)
+const variantIcon = {
+  success: CheckCircleIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+  info: InfoIcon,
+};
 
-	componentDidMount(){
-		setTimeout(e => this.setState({open : true}), 10)
+const styles1 = theme => ({
+  success: {
+    backgroundColor: green[600],
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  info: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  warning: {
+    backgroundColor: amber[700],
+  },
+  icon: {
+    fontSize: 20,
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit,
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+});
 
-		if(this.props.duration){
-			this.timeout = window.setTimeout(()=>{
-				this.close()
-			}, this.props.duration)
-		}
-	}
+function MySnackbarContent(props) {
+  const { classes, className, message, onClose, variant, ...other } = props;
+  const Icon = variantIcon[variant];
 
-	render(){
-		return 	<div className={'item'} data-type={this.props.type} data-open={this.state.open} style={this.style}>
-              <span dangerouslySetInnerHTML={{__html : this.props.text}}/>
-              <CloseIcon onClick={ e => this.close(this.props.id)}/>
-            </div>
-	}
-
-	close(){
-		clearTimeout(this.timeout);
-		
-		this.setState({open : false}, ()=>{
-			setTimeout(e => this.props.handleClose(this.props.id), this.transitionSpeed)
-		})
-	}
+  return (
+    <SnackbarContent
+      className={classNames(classes[variant], className)}
+      aria-describedby="client-snackbar"
+      message={
+        <span id="client-snackbar" className={classes.message}>
+          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+          {message}
+        </span>
+      }
+      action={[
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>,
+      ]}
+      {...other}
+    />
+  );
 }
 
-const Notification = ({notifications, dispatch}) => {
-	return 	<div className="element notification">
-				{notifications.map( (notification, i) => <NotificationItem key={i} {...notification} handleClose={ id => dispatch(notificationRemove(id)) }/> )}
-			</div>
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
+
+class Snackbars extends React.Component {
+
+  onClose(id) {
+    setTimeout(() => this.props.dispatch(notificationRemove(id)), 500)
+  }
+
+  render() {
+    const { notifications } = this.props;
+
+    return (
+      <div>		  
+        {notifications.map( (notification, i) => <Snackbar
+          key={i}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          open={!notification.closed}
+          autoHideDuration={notification.duration}
+          onClose={() => this.onClose(notification.id)}
+        >
+        
+          <MySnackbarContentWrapper
+              onClose={() => this.onClose(notification.id)}
+              {...notification}
+            />
+        
+        </Snackbar> )}
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => ({
 	notifications: state.app.notifications
 })
 
-export default connect(mapStateToProps)(Notification)
+
+export default connect(mapStateToProps)(Snackbars);

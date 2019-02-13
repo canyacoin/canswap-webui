@@ -26,15 +26,14 @@ export const TOGGLE_TOKEN = 'TOGGLE_TOKEN'
 
 export const UPDATE_POOLS = 'UPDATE_POOLS'
 
-export const notificationAdd = (text, type, duration, identifier) => {
+export const notificationAdd = (message, type, duration) => {
 	return {
 		type : NOTIFICATION_ADD,
 		item : {
-			id : md5(text + Date() + Math.random()),
-			text : text,
-			type : type || NotificationType.NOTIFICATION,
-			duration : duration,
-			identifier : identifier
+			id : md5(message + Date() + Math.random()),
+			message,
+      variant: type || NotificationType.SUCCESS,
+			duration : duration
 		} 
 	}
 }
@@ -159,10 +158,9 @@ export const approvalDenied = () => {
 	return async dispatch => {
 		dispatch(notificationAdd(
 			'Whoops! Vital transactions were denied.',
-			NotificationType.WARNING,
+			NotificationType.ERROR,
 			5000
 		))
-		window.scrollTo(0, 0)
 	}
 }
 
