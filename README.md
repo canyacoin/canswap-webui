@@ -1,3 +1,12 @@
+****
+
+> **Mirror**
+> This repo is mirrors from the Gitlab master as a backup. Please commit to this:
+> https://gitlab.com/canyacoin/canapps/canswap/web-ui
+
+****
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
